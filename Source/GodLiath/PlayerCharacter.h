@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
+class AGun;
+
 UCLASS()
 class GODLIATH_API APlayerCharacter : public ACharacter
 {
@@ -26,13 +28,31 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-private:
-void MoveForward(float AxisValue);
-void MoveRight(float AxisValue);
-void LookUpRate(float AxisValue);
-void LookRightRate(float AxisValue);
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
-UPROPERTY(EditAnywhere)
-float RotationRate = 10;
+	UFUNCTION(BlueprintPure)
+	bool IsDead() const;
+
+private:
+	void MoveForward(float AxisValue);
+	void MoveRight(float AxisValue);
+	void LookUpRate(float AxisValue);
+	void LookRightRate(float AxisValue);
+	void Shoot();
+
+	UPROPERTY(EditAnywhere)
+	float RotationRate = 10;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AGun> GunClass;
+
+	UPROPERTY()
+	AGun* Gun;
+
+	UPROPERTY(EditDefaultsOnly)
+	float MaxHealth = 100;
+
+	UPROPERTY(VisibleAnywhere)
+	float Health;
 
 };
