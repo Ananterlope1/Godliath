@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "BerserkerCharacter.generated.h"
 
+class AMeleeWeapon;
+
 UCLASS()
 class GODLIATH_API ABerserkerCharacter : public ACharacter
 {
@@ -29,9 +31,27 @@ public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	UFUNCTION(BlueprintPure)
-	bool IsDead() const;
+	bool IsDead();
+
+	void SwingWeapon();
 
 private:
+
+	void MoveForward(float AxisValue);
+	void MoveRight(float AxisValue);
+	void LookUpRate(float AxisValue);
+	void LookRightRate(float AxisValue);
+	
+
+	UPROPERTY(EditAnywhere)
+	float RotationRate = 10;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AMeleeWeapon> MeleeClass;
+
+	UPROPERTY()
+	AMeleeWeapon* MeleeWeapon;
+
 	UPROPERTY(EditDefaultsOnly)
 	float MaxHealth = 100;
 
