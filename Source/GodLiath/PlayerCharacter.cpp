@@ -5,6 +5,7 @@
 
 #include "Gun.h"
 #include "Components/CapsuleComponent.h"
+#include "GodLiathGameModeBase.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -66,6 +67,11 @@ float APlayerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const
 	{
 		DetachFromControllerPendingDestroy();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		AGodLiathGameModeBase* GameMode = GetWorld()->GetAuthGameMode<AGodLiathGameModeBase>();
+		if (GameMode != nullptr)
+		{
+			GameMode->PawnKilled(this);
+		}
 	}
 	
 	

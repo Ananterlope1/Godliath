@@ -13,5 +13,8 @@ UCLASS()
 class GODLIATH_API AGodLiathGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
+
+public:
+	virtual void PawnKilled(APawn* PawnKilled);
 	
 };

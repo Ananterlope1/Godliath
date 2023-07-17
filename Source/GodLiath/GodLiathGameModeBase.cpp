@@ -3,3 +3,8 @@
 
 #include "GodLiathGameModeBase.h"
 
+
+void AGodLiathGameModeBase::PawnKilled(APawn* PawnKilled)
+{
+    
+}

@@ -5,7 +5,7 @@
 
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AIController.h"
-#include "BerserkerCharacter.h"
+#include "EnemyCharacter.h"
 
 
 
@@ -23,7 +23,7 @@ EBTNodeResult::Type UBTTask_MeleeAttack::ExecuteTask(UBehaviorTreeComponent &Own
     {
         return EBTNodeResult::Failed;
     }
-    ABerserkerCharacter* Character = Cast<ABerserkerCharacter>(OwnerComp.GetAIOwner()->GetPawn());
+    AEnemyCharacter* Character = Cast<AEnemyCharacter>(OwnerComp.GetAIOwner()->GetPawn());
     if (Character == nullptr)
     {
         return EBTNodeResult::Failed;
