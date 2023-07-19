@@ -26,3 +26,17 @@ float ABerserkerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent co
 
 	return DamageToApply;
 }
+
+void ABerserkerCharacter::Tick(float DeltaTime)
+{
+	//Add check for berserkers size/ scale then add tag to move (unlock) the snow pile
+}
+
+bool ABerserkerCharacter::Eat()
+{
+    // Get object to eat
+    // Despawn object
+    // Increase berserker character scale by value
+
+	return true;
+}

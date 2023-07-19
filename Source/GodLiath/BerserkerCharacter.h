@@ -16,16 +16,11 @@ class GODLIATH_API ABerserkerCharacter : public AEnemyCharacter
 {
 	GENERATED_BODY()
 
-// public:
-// 	// Sets default values for this character's properties
-// 	ABerserkerCharacter();
-
-// protected:
-// 	// Called when the game starts or when spawned
-// 	virtual void BeginPlay() override;
-
 public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
-
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+	//Eat function
+	bool Eat();
 	
 };
