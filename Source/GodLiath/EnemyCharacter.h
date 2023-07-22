@@ -30,10 +30,16 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
-	UFUNCTION(BlueprintPure)
-	bool IsDead();
+	// UFUNCTION(BlueprintPure)
+	// virtual bool IsDead();
 
 	void SwingWeapon();
+
+	UPROPERTY(VisibleAnywhere)
+	float Health;
+
+	UPROPERTY(EditDefaultsOnly)
+	float MaxHealth = 100;
 
 private:
 
@@ -51,11 +57,6 @@ private:
 
 	UPROPERTY()
 	AMeleeWeapon* MeleeWeapon;
-
-	UPROPERTY(EditDefaultsOnly)
-	float MaxHealth = 100;
-
-	UPROPERTY(VisibleAnywhere)
-	float Health;
+	
 
 };

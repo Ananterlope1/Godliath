@@ -2,31 +2,19 @@
 
 
 #include "BerserkAIController.h"
-
-#include "Kismet/GameplayStatics.h"
-#include "BehaviorTree/BlackboardComponent.h"
+#include "BerserkerCharacter.h"
 
 
-void ABerserkAIController::BeginPlay()
+bool ABerserkAIController::IsDead() const
 {
-    Super::BeginPlay();
-
-    APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-
-    if (AIBehaviour != nullptr)
+    ABerserkerCharacter* ControlledCharacter = Cast<ABerserkerCharacter>(GetPawn());
+    if (ControlledCharacter != nullptr)
     {
-        RunBehaviorTree(AIBehaviour);
+        // bool isBerserkerDead = ControlledCharacter->IsDead();
+        // UE_LOG(LogTemp, Warning, TEXT("Berserker ControlledCharacter Is Dead? %s"), isBerserkerDead? TEXT("true") : TEXT("false"));
+        
+        return ControlledCharacter->IsDead();
+    }
 
-        GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
-
-
-    }   
-
-}
-
-// Called every frame
-void ABerserkAIController::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);   
-
+    return true;
 }

@@ -24,3 +24,14 @@ float AMinionCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const
 
 	return DamageToApply;
 }
+
+bool AMinionCharacter::IsDead()
+{	
+	if (Health <= 0)
+	{
+		IsEatable = true;
+		return true;
+	}
+	
+	return false;
+}

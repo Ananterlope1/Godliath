@@ -4,31 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "EnemyAIController.h"
 #include "BerserkAIController.generated.h"
+
 
 /**
  * 
  */
 UCLASS()
-class GODLIATH_API ABerserkAIController : public AAIController
+class GODLIATH_API ABerserkAIController : public AEnemyAIController
 {
 	GENERATED_BODY()
 
 public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-
-protected:
-	virtual void BeginPlay() override;
-
-
-private:
-
-	// UPROPERTY(EditAnywhere)
-	// float AcceptanceRadius = 100;
-
-	UPROPERTY(EditAnywhere)
-	class UBehaviorTree* AIBehaviour;
+	bool IsDead() const;
 
 };

@@ -57,9 +57,7 @@ float AEnemyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const&
 	float DamageToApply = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	DamageToApply = FMath::Min(Health, DamageToApply);
 	Health -= DamageToApply;
-
-	UE_LOG(LogTemp, Warning, TEXT("Health Left: %f"), Health);
-
+	
 	return DamageToApply;
 
 }
@@ -70,10 +68,10 @@ void AEnemyCharacter::SwingWeapon()
 
 }
 
-bool AEnemyCharacter::IsDead() 
-{	
-	return Health <= 0;
-}
+// bool AEnemyCharacter::IsDead() 
+// {	
+// 	return Health <= 0;
+// }
 
 void AEnemyCharacter::MoveForward(float AxisValue) 
 {

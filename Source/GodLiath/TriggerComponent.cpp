@@ -36,16 +36,17 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	AActor* Actor = GetAcceptableActor();
 	if (Actor != nullptr)
 	{
-
-		UPrimitiveComponent* Component = Cast<UPrimitiveComponent>(Actor->GetRootComponent());
-		if (Component != nullptr)
-		{	
+		
+		// If wanting the pawn or actor to stay stuck to the moving object.
+		// UPrimitiveComponent* Component = Cast<UPrimitiveComponent>(Actor->GetRootComponent());
+		// if (Component != nullptr)
+		// {	
 			
-			Component->SetSimulatePhysics(false);
-			Actor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
+		// 	Component->SetSimulatePhysics(false);
+		// 	Actor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
 			
 
-		}
+		// }
 		
         if (Mover != nullptr)
         {
@@ -53,7 +54,7 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
         }else if (Rotator != nullptr)
         {
             Rotator->SetShouldMove(true);
-			UE_LOG(LogTemp, Warning, TEXT("Unlocking"));
+			// UE_LOG(LogTemp, Warning, TEXT("Unlocking"));
         }
         
 		
@@ -67,7 +68,7 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
         }else if (Rotator != nullptr)
         {
             Rotator->SetShouldMove(false);
-			UE_LOG(LogTemp, Warning, TEXT("Locking"));
+			// UE_LOG(LogTemp, Warning, TEXT("Locking"));
         }
 		
 		// UE_LOG(LogTemp, Warning, TEXT("Locking"));

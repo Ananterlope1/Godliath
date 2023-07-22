@@ -19,6 +19,10 @@ class GODLIATH_API AMinionCharacter : public AEnemyCharacter
 public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
+	UPROPERTY(EditAnywhere)
+	bool IsEatable = false;
 
+	UFUNCTION(BlueprintPure)
+	bool IsDead();
 	
 };
