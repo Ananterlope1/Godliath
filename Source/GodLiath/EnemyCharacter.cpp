@@ -57,6 +57,10 @@ float AEnemyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const&
 	float DamageToApply = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	DamageToApply = FMath::Min(Health, DamageToApply);
 	Health -= DamageToApply;
+
+	UE_LOG(LogTemp, Warning, TEXT("Berswerker damage taken: %f"), DamageToApply);
+	UE_LOG(LogTemp, Warning, TEXT("Berserker Health: %f"), Health);
+	
 	
 	return DamageToApply;
 

@@ -3,18 +3,30 @@
 
 #include "BerserkerCharacter.h"
 #include "Components/CapsuleComponent.h"
+#include "TimerManager.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "GodLiathGameModeBase.h"
 
 
 
+void ABerserkerCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	static ConstructorHelpers::FObjectFinder<UAnimSequence> anim(TEXT("/Script/Engine.AnimSequence'/Game/ParagonRampage/Characters/Heroes/Rampage/Animations/Death_RiseFrom.Death_RiseFrom'"));
+	ResurrectAnim = anim.Object;
+}
 
 
 float ABerserkerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
     float DamageToApply = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	UE_LOG(LogTemp, Display, TEXT("Berserk Taking Damage"));
 	
     if (IsDead())
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Checking if dead"));
 		if (TrueDeath)
 		{
 			UE_LOG(LogTemp, Display, TEXT("IsTrueDeath Berserker"));
@@ -28,8 +40,10 @@ float ABerserkerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent co
 			}
 		}else
 		{
+			GetWorldTimerManager().SetTimer(ResurrectTimer, this, &ABerserkerCharacter::PlayResurrection, ResurrectDelay);
 			UE_LOG(LogTemp, Warning, TEXT("Resurrecting Berserker Health!"));
 			DamageToApply = -MaxHealth;
+			
 		}		
 		
 	}
@@ -50,7 +64,7 @@ bool ABerserkerCharacter::IsDead() const
 		return Health <= 0;
 	}
 	
-	return false;	
+	return Health <= 0;	
 
 }
 
@@ -65,3 +79,16 @@ bool ABerserkerCharacter::Eat()
 
 	return true;
 }
+
+bool ABerserkerCharacter::IsTrueDead() const
+{
+	return TrueDeath;
+}
+
+void ABerserkerCharacter::PlayResurrection() const
+{
+	UE_LOG(LogTemp, Error, TEXT("Berserk Resurrection"));
+	GetMesh()->PlayAnimation(ResurrectAnim, false);
+	
+}
+

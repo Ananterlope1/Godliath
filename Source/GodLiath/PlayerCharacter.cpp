@@ -61,7 +61,7 @@ float APlayerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const
 	DamageToApply = FMath::Min(Health, DamageToApply);
 	Health -= DamageToApply;
 
-	UE_LOG(LogTemp, Warning, TEXT("Health Left: %f"), Health);
+	// UE_LOG(LogTemp, Warning, TEXT("Health Left: %f"), Health);
 
 	if (IsDead())
 	{
@@ -111,4 +111,9 @@ void APlayerCharacter::Shoot()
 bool APlayerCharacter::IsDead() const
 {	
 	return Health <= 0;
+}
+
+float APlayerCharacter::GetHealthPercent() const
+{
+	return Health / MaxHealth;
 }
