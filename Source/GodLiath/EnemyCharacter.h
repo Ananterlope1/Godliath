@@ -31,7 +31,7 @@ public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	// UFUNCTION(BlueprintPure)
-	// virtual bool IsDead();
+	// virtual bool IsDead() const;
 
 	void SwingWeapon();
 
@@ -40,6 +40,15 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	float MaxHealth = 100;
+
+	UPROPERTY(EditAnywhere)
+	bool Eatable = false;	
+	
+	UFUNCTION(BlueprintPure)
+	bool IsEatable();
+
+	UFUNCTION(BlueprintPure)
+	bool SetIsEatable(bool SetIsEatable);
 
 private:
 

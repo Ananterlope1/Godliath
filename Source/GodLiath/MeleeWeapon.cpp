@@ -36,38 +36,52 @@ void AMeleeWeapon::Tick(float DeltaTime)
 
 }
 
-void AMeleeWeapon::SwingWeapon()
+bool AMeleeWeapon::MeleeTrace(FHitResult& HitResult, FVector& ShotDirection)
 {
-
-	APawn* OwnerPawn = Cast<APawn>(GetOwner());
-	if (OwnerPawn == nullptr) return;
-	AController* OwnerController = OwnerPawn->GetController();
-	if (OwnerController == nullptr) return;
+	AController* OwnerController = GetOwnerController();
+	if (OwnerController == nullptr) 
+		return false;	
 	FVector OwnerLocation;
 	FRotator OwnerRotation;
 	OwnerController->GetPlayerViewPoint(OwnerLocation, OwnerRotation);
+	ShotDirection = -OwnerRotation.Vector();
 
 	FVector End = OwnerLocation + OwnerRotation.Vector() * MaxRange;
-	// Todo: LineTracing
-	FHitResult HitResult;
 
 	//Things for attack to ignore i.e. not hit itself
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
 	Params.AddIgnoredActor(GetOwner());
-	bool bSuccess = GetWorld()->LineTraceSingleByChannel(HitResult, OwnerLocation, End, ECollisionChannel::ECC_GameTraceChannel1, Params);
 	DrawDebugLine(GetWorld(), OwnerLocation, End, FColor::Green, true, 30 );
+	return GetWorld()->LineTraceSingleByChannel(HitResult, OwnerLocation, End, ECollisionChannel::ECC_GameTraceChannel1, Params);
+
+}
+
+AController* AMeleeWeapon::GetOwnerController() const
+{
+	APawn* OwnerPawn = Cast<APawn>(GetOwner());
+	if (OwnerPawn == nullptr) 
+		return nullptr;
+	return OwnerPawn->GetController();
+}
+
+void AMeleeWeapon::SwingWeapon()
+{
+
+	FHitResult HitResult;
+	FVector SwingDirection;	
+	bool bSuccess = MeleeTrace(HitResult, SwingDirection);
 
 	if (bSuccess)
 	{
-		FVector SwingDirection = -OwnerRotation.Vector();
-		// DrawDebugPoint(GetWorld(), HitResult.Location, 20, FColor::Green, true);
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, HitResult.Location, SwingDirection.Rotation());
 		
 		AActor* HitActor = HitResult.GetActor();
 		if (HitActor != nullptr)
 		{
+			UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ImpactSoundEnemy, HitResult.Location, SwingDirection.Rotation());
 			FPointDamageEvent DamageEvent(Damage, HitResult, SwingDirection, nullptr);
+			AController* OwnerController = GetOwnerController();
 			HitActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
 		}
 	}

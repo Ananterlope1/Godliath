@@ -14,15 +14,17 @@ class GODLIATH_API AMinionCharacter : public AEnemyCharacter
 {
 	GENERATED_BODY()
 
+protected:
+	virtual void BeginPlay() override;
 
 
 public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
-	UPROPERTY(EditAnywhere)
-	bool IsEatable = false;
-
 	UFUNCTION(BlueprintPure)
 	bool IsDead();
 	
+	
+
+
 };

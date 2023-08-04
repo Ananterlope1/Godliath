@@ -15,7 +15,7 @@ void AMainPlayer_Controller::BeginPlay()
 void AMainPlayer_Controller::GameHasEnded(class AActor* EndGameFocus, bool bIsWinner)
 {
     Super::GameHasEnded(EndGameFocus, bIsWinner);
-    HUD->RemoveFromViewport();
+    HUD->RemoveFromParent();
     if (bIsWinner)
     {
         UUserWidget* WinScreen = CreateWidget(this, WinScreenClass);

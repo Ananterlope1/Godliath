@@ -81,7 +81,6 @@ void AGun::PullTrigger()
 		AActor* HitActor = HitResult.GetActor();
 		if (HitActor != nullptr)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("HitActorName"));
 			if (HitActor->IsA<AEnemyCharacter>())
 			{
 				UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ImpactSoundEnemy, HitResult.Location, ShotDirection.Rotation());

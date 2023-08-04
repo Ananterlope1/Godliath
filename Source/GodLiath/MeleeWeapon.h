@@ -32,12 +32,22 @@ public:
 	USkeletalMeshComponent* Mesh;
 
 	UPROPERTY(EditAnywhere)
+	USoundBase* SwingSound;
+
+	UPROPERTY(EditAnywhere)
 	UParticleSystem* ImpactEffect;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* ImpactSoundEnemy;
 
 	UPROPERTY(EditAnywhere)
 	float MaxRange = 100;
 
 	UPROPERTY(EditAnywhere)
 	float Damage = 10;
+
+	bool MeleeTrace(FHitResult& HitResult, FVector& ShotDirection);
+
+	AController* GetOwnerController() const;
 
 };

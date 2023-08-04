@@ -56,10 +56,10 @@ float AEnemyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const&
 {
 	float DamageToApply = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	DamageToApply = FMath::Min(Health, DamageToApply);
-	Health -= DamageToApply;
+	
 
-	UE_LOG(LogTemp, Warning, TEXT("Berswerker damage taken: %f"), DamageToApply);
-	UE_LOG(LogTemp, Warning, TEXT("Berserker Health: %f"), Health);
+	UE_LOG(LogTemp, Warning, TEXT("Enemy damage taken: %f"), DamageToApply);
+	UE_LOG(LogTemp, Warning, TEXT("Enemy Health: %f"), Health);
 	
 	
 	return DamageToApply;
@@ -72,6 +72,7 @@ void AEnemyCharacter::SwingWeapon()
 
 }
 
+// Can't use as UFUNCTION isn't overrideable in child
 // bool AEnemyCharacter::IsDead() 
 // {	
 // 	return Health <= 0;
@@ -96,4 +97,20 @@ void AEnemyCharacter::LookUpRate(float AxisValue)
 void AEnemyCharacter::LookRightRate(float AxisValue)
 {
 	AddControllerYawInput(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
+}
+
+bool AEnemyCharacter::IsEatable()
+{
+	// if (Eatable)
+	// {
+	// 	this->Tags.Add(FName("Eatable"));
+	// }
+	
+	return Eatable;
+}
+
+bool AEnemyCharacter::SetIsEatable(bool SetIsEatable)
+{
+	Eatable = SetIsEatable;
+	return Eatable;
 }

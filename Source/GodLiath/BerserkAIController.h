@@ -17,6 +17,6 @@ class GODLIATH_API ABerserkAIController : public AEnemyAIController
 	GENERATED_BODY()
 
 public:
-	bool IsDead() const;
+	bool IsDead() const override;
 
 };

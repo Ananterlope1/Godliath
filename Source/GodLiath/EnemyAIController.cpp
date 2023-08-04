@@ -18,7 +18,7 @@ void AEnemyAIController::BeginPlay()
         RunBehaviorTree(AIBehaviour);
 
         GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
-
+        
         
     }   
 
@@ -29,4 +29,18 @@ void AEnemyAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);   
 
+}
+
+bool AEnemyAIController::IsDead() const
+{
+    AEnemyAIController* ControlledCharacter = Cast<AEnemyAIController>(GetPawn());
+    if (ControlledCharacter != nullptr)
+    {
+        // bool isBerserkerDead = ControlledCharacter->IsDead();
+        // UE_LOG(LogTemp, Warning, TEXT("Berserker ControlledCharacter Is Dead? %s"), isBerserkerDead? TEXT("true") : TEXT("false"));
+        
+        return ControlledCharacter->IsDead();
+    }
+
+    return true;
 }

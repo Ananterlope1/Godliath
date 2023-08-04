@@ -30,24 +30,34 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
 	//Eat function
-	bool Eat();
+	void Eat();
 
 	// Used when in capture zone to allow actual death.
 	UPROPERTY(EditAnywhere)
-	bool TrueDeath = true;
+	bool Eating = false;
+
+	// Check if in capture/ killzone
+	UFUNCTION(BlueprintPure)
+	bool IsEating() const;
+
+	// Used when in capture zone to allow actual death.
+	UPROPERTY(EditAnywhere)
+	bool TrueDeath = false;
 
 	// Check if in capture/ killzone
 	UFUNCTION(BlueprintPure)
 	bool IsTrueDead() const;
 
 private:
-	UAnimSequence *ResurrectAnim;
 
 	UPROPERTY(EditAnywhere)
 	float ResurrectDelay = 3;
 
+	UPROPERTY(EditAnywhere)
+	FVector EatingScale = FVector(0.2, 0.2, 0.2);
+
 	FTimerHandle ResurrectTimer;
 
-	void PlayResurrection() const;
+	void PlayResurrection();
 	
 };

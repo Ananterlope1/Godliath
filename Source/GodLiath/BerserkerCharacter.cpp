@@ -12,9 +12,7 @@
 void ABerserkerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	static ConstructorHelpers::FObjectFinder<UAnimSequence> anim(TEXT("/Script/Engine.AnimSequence'/Game/ParagonRampage/Characters/Heroes/Rampage/Animations/Death_RiseFrom.Death_RiseFrom'"));
-	ResurrectAnim = anim.Object;
+	
 }
 
 
@@ -23,6 +21,7 @@ float ABerserkerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent co
     float DamageToApply = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	UE_LOG(LogTemp, Display, TEXT("Berserk Taking Damage"));
+	Health -= DamageToApply;
 	
     if (IsDead())
 	{
@@ -40,9 +39,12 @@ float ABerserkerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent co
 			}
 		}else
 		{
+			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			UE_LOG(LogTemp, Error, TEXT("Count to 5!"));
 			GetWorldTimerManager().SetTimer(ResurrectTimer, this, &ABerserkerCharacter::PlayResurrection, ResurrectDelay);
 			UE_LOG(LogTemp, Warning, TEXT("Resurrecting Berserker Health!"));
-			DamageToApply = -MaxHealth;
+			
+			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 			
 		}		
 		
@@ -68,7 +70,7 @@ bool ABerserkerCharacter::IsDead() const
 
 }
 
-bool ABerserkerCharacter::Eat()
+void ABerserkerCharacter::Eat()
 {
     // Get object to eat
     // Despawn object
@@ -76,8 +78,16 @@ bool ABerserkerCharacter::Eat()
 	// Check boolean selector for dead enemy in range. 
 	// BTService for enemy dead/eatable location
 	// BTTask for eat with animation and gibs
+	Eating = true;
+	FVector CurrentScale = this->GetActorScale3D();
+	CurrentScale += EatingScale;
+	this->SetActorScale3D(CurrentScale);
+	// In animation, set the eating back to false with delay if true?
+}
 
-	return true;
+bool ABerserkerCharacter::IsEating() const
+{
+	return Eating;
 }
 
 bool ABerserkerCharacter::IsTrueDead() const
@@ -85,10 +95,11 @@ bool ABerserkerCharacter::IsTrueDead() const
 	return TrueDeath;
 }
 
-void ABerserkerCharacter::PlayResurrection() const
+void ABerserkerCharacter::PlayResurrection()
 {
-	UE_LOG(LogTemp, Error, TEXT("Berserk Resurrection"));
-	GetMesh()->PlayAnimation(ResurrectAnim, false);
+	UE_LOG(LogTemp, Error, TEXT("Berserk Resurrection"));	
+	Health = MaxHealth;
+	IsDead();
 	
 }
 

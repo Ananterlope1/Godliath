@@ -16,4 +16,8 @@ class GODLIATH_API AMinionAIController : public AEnemyAIController
 	
 public:
 	bool IsDead() const;
+
+	bool IsEatable() const;
+
+	void setIsEatable(bool AreEatable);
 };
