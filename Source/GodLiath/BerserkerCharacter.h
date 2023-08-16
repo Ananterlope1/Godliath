@@ -54,7 +54,7 @@ private:
 	float ResurrectDelay = 3;
 
 	UPROPERTY(EditAnywhere)
-	FVector EatingScale = FVector(0.2, 0.2, 0.2);
+	FVector EatingScale = FVector(1.2, 1.2, 1.2);
 
 	FTimerHandle ResurrectTimer;
 

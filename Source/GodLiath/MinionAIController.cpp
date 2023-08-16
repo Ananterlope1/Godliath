@@ -10,7 +10,7 @@ bool AMinionAIController::IsDead() const
     AMinionCharacter* ControlledCharacter = Cast<AMinionCharacter>(GetPawn());
     if (ControlledCharacter != nullptr)
     {
-        UE_LOG(LogTemp, Error, TEXT("Minion Controller checking if dead"));
+        UE_LOG(LogTemp, Error, TEXT("Minion Controller checking if dead"));        
         return ControlledCharacter->IsDead();
     }
 
@@ -23,6 +23,8 @@ bool AMinionAIController::IsEatable() const
     if (ControlledCharacter != nullptr)
     {
         UE_LOG(LogTemp, Error, TEXT("Minion Controller checking if Eatable"));
+        bool EatableCheck = ControlledCharacter->IsEatable();
+        UE_LOG(LogTemp, Display, TEXT("Minion Controller is eatable: %s"), EatableCheck? TEXT("true") : TEXT("false"));
         return ControlledCharacter->IsEatable();
     }
 

@@ -37,8 +37,8 @@ void UBTService_IsEnemyCloser::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
         FVector ClosestPlayerLoc = BlackboardComp->GetValueAsVector(PlayerLocKey.SelectedKeyName);  
         
         
-        UE_LOG(LogTemp, Display, TEXT("ClosestEnemyLocKey: %s"), *ClosestEnemyLoc.ToString());
-        UE_LOG(LogTemp, Display, TEXT("ClosestPlayerLocKey: %s"), *ClosestPlayerLoc.ToString());
+        // UE_LOG(LogTemp, Display, TEXT("ClosestEnemyLocKey: %s"), *ClosestEnemyLoc.ToString());
+        // UE_LOG(LogTemp, Display, TEXT("ClosestPlayerLocKey: %s"), *ClosestPlayerLoc.ToString());
 
         if (FVector::Dist(OwnerLocation, ClosestEnemyLoc) < FVector::Dist(OwnerLocation, ClosestPlayerLoc))
         {

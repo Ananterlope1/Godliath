@@ -34,5 +34,7 @@ private:
 	FVector ThisEnemyLocation;
 	
 	FVector PreviousClosestEnemyLocation;
+
+	// bool CheckForVectorChange;
 	
 };

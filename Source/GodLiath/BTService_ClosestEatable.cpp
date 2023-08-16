@@ -24,32 +24,32 @@ void UBTService_ClosestEatable::TickNode(UBehaviorTreeComponent& OwnerComp, uint
     UE_LOG(LogTemp, Display, TEXT("Owner Location: %s"), *OwnerLoc);
 
     FVector ChosenClosestEatableLocation;
+    // Bool to say whether enemy location has been changed
+    bool CheckForVectorChange = false;
+
+    UE_LOG(LogTemp, Warning, TEXT("Chosen Eatable location changed?: %s"), CheckForVectorChange? TEXT("true") : TEXT("false"));
+
 
     // Check over all the eatable actors and find the closest one.
     for (AMinionAIController* MinionAI : TActorRange<AMinionAIController>(GetWorld()))
     {
+        UE_LOG(LogTemp, Display, TEXT("Entering Eatable Minion Loop"));
                 
-        if (MinionAI->IsEatable())
+        if (MinionAI->IsEatable() == true)
         {
-            UE_LOG(LogTemp, Display, TEXT("Check MinionAI loop"));
-            //Add location to TArray of FVectors? Loop over that and find closest?
-            // MinionLocationArray.Emplace(MinionAI->GetFocusActor()->GetActorLocation());
+            UE_LOG(LogTemp, Display, TEXT("Check eatable loop"));
 
-            ThisEatableLocation = MinionAI->GetPawn()->GetActorLocation();
-            FString EatableVec = ThisEatableLocation.ToCompactString();
-            UE_LOG(LogTemp, Warning, TEXT("This EatableLocation: %s"), *EatableVec);
+            ThisEatableLocation = MinionAI->GetPawn()->GetTransform().GetLocation();
+            FString CheckEatVec = ThisEatableLocation.ToCompactString();
+            UE_LOG(LogTemp, Error, TEXT("The checked eatable location: %s"), *CheckEatVec);
 
-            // Or have a previous closest which is overwritten when another closer eatable is found?
-            double OwnThisEatable = FVector::Dist(OwnerLocation, ThisEatableLocation);
-            UE_LOG(LogTemp, Warning, TEXT("Distance between OwnerLocation and This eatable Loc : %d"), OwnThisEatable);
+            
+            // ThisEatableLocation = MinionAI->GetPawn()->GetActorLocation();
 
-            double OwnOldEatable = FVector::Dist(OwnerLocation, PreviousClosestEatableLocation);
-            UE_LOG(LogTemp, Display, TEXT("Distance between OwnerLocation and Old eatable Loc : %d"), OwnOldEatable);
-
-
-            if (FVector::Dist(OwnerLocation, ThisEatableLocation) < FVector::Dist(OwnerLocation, PreviousClosestEatableLocation))
+            if (FVector::Dist(OwnerLocation, ThisEatableLocation) <= FVector::Dist(OwnerLocation, PreviousClosestEatableLocation))
             {
                 ChosenClosestEatableLocation = ThisEatableLocation;
+                CheckForVectorChange = true;
                 EatablePawn = Cast<AMinionCharacter>(MinionAI->GetPawn());
                 FString EatableName = EatablePawn->GetName();
                 UE_LOG(LogTemp, Error, TEXT("Line Of Sight to Eatable: %s"), *EatableName);
@@ -61,13 +61,13 @@ void UBTService_ClosestEatable::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 
     
 
-    UE_LOG(LogTemp, Warning, TEXT("Exit MinionAI loop"));
+    UE_LOG(LogTemp, Warning, TEXT("Exit eatable loop"));
     
     FString ChosenEatVec = ChosenClosestEatableLocation.ToCompactString();
-    UE_LOG(LogTemp, Error, TEXT("The returned chosen location: %s"), *ChosenEatVec);
+    UE_LOG(LogTemp, Error, TEXT("The returned eatable location: %s"), *ChosenEatVec);
 
             
-    if (ChosenClosestEatableLocation.IsZero() == false && OwnerComp.GetAIOwner()->LineOfSightTo(EatablePawn))
+    if (CheckForVectorChange && OwnerComp.GetAIOwner()->LineOfSightTo(EatablePawn))
     {
         UE_LOG(LogTemp, Display, TEXT("Setting Line of sight to eatable"));
         OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), ChosenClosestEatableLocation);

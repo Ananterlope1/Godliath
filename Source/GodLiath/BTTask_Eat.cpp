@@ -31,8 +31,12 @@ EBTNodeResult::Type UBTTask_Eat::ExecuteTask(UBehaviorTreeComponent &OwnerComp, 
     Character->Eat();
 
     FName EatableName = TEXT("ClosestEatableActor");
-    AEnemyCharacter* ClosestEatableActor = Cast<AEnemyCharacter>(BlackboardComp->GetValueAsObject(EatableName));  
-    ClosestEatableActor->SetIsEatable(false);
+    AEnemyCharacter* ClosestEatableActor = Cast<AEnemyCharacter>(BlackboardComp->GetValueAsObject(EatableName)); 
+    FString ActorName = ClosestEatableActor->GetName();
+    UE_LOG(LogTemp, Warning, TEXT("ClosestEatable Actor Name: %s"), *ActorName);
+    bool EatableCheck = ClosestEatableActor->SetIsEatable(false);
+    ClosestEatableActor->DetachFromControllerPendingDestroy();
+    UE_LOG(LogTemp, Error, TEXT("Eatable Check is: %s"), EatableCheck? TEXT("true") : TEXT("false"));
 
     //Once eaten then set eatable to false
 

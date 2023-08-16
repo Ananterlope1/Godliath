@@ -36,8 +36,8 @@ void UBTService_IsEatableCloser::TickNode(UBehaviorTreeComponent& OwnerComp, uin
         FVector ClosestPlayerLoc = BlackboardComp->GetValueAsVector(PlayerLocKey.SelectedKeyName);  
         
         
-        UE_LOG(LogTemp, Display, TEXT("ClosestEatLocKey: %s"), *ClosestEatLoc.ToString());
-        UE_LOG(LogTemp, Display, TEXT("ClosestPlayerLocKey: %s"), *ClosestPlayerLoc.ToString());
+        // UE_LOG(LogTemp, Display, TEXT("ClosestEatLocKey: %s"), *ClosestEatLoc.ToString());
+        // UE_LOG(LogTemp, Display, TEXT("ClosestPlayerLocKey: %s"), *ClosestPlayerLoc.ToString());
 
         if (FVector::Dist(OwnerLocation, ClosestEatLoc) < FVector::Dist(OwnerLocation, ClosestPlayerLoc))
         {
