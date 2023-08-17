@@ -5,13 +5,22 @@
 
 #include "Gun.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/MovementComponent.h"
 #include "GodLiathGameModeBase.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	// CharRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	// SetRootComponent(CharRoot);
+
+	// CharMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
+	// CharMesh->SetupAttachment(CharRoot);
 
 }
 
@@ -52,6 +61,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent -> BindAxis(TEXT("LookRightRate"), this, &APlayerCharacter::LookRightRate);
 	PlayerInputComponent -> BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent -> BindAction(TEXT("Shoot"), EInputEvent::IE_Pressed, this, &APlayerCharacter::Shoot);
+	PlayerInputComponent -> BindAction(TEXT("Dash"), EInputEvent::IE_Pressed, this, &APlayerCharacter::Dash);
+	PlayerInputComponent -> BindAction(TEXT("Sprint"), EInputEvent::IE_Pressed, this, &APlayerCharacter::SprintStart);
+	PlayerInputComponent -> BindAction(TEXT("Sprint"), EInputEvent::IE_Released, this, &APlayerCharacter::SprintEnd);
 
 }
 
@@ -106,6 +118,41 @@ void APlayerCharacter::LookRightRate(float AxisValue)
 void APlayerCharacter::Shoot()
 {
 	Gun -> PullTrigger();
+}
+
+void APlayerCharacter::Dash()
+{
+	// For adding emitters and sound to dash
+	UGameplayStatics::SpawnEmitterAttached(JetpackEmitter, GetMesh(), TEXT("JetpackEmitter_L"));
+	UGameplayStatics::SpawnEmitterAttached(JetpackEmitter, GetMesh(), TEXT("JetpackEmitter_R"));
+	UGameplayStatics::SpawnSoundAttached(JetpackSound, GetMesh(), TEXT("JetpackEmitter_L"));
+	UGameplayStatics::SpawnSoundAttached(JetpackSound, GetMesh(), TEXT("JetpackEmitter_R"));
+
+	// ShotDirection = -OwnerRotation.Vector();
+	
+	const FVector ForwardDirection = this->GetActorRotation().Vector();
+	LaunchCharacter(ForwardDirection * DashDistance, true, true);
+	FHitResult FloorHit = GetCharacterMovement()->CurrentFloor.HitResult;
+	FVector NormalFloor = GetCharacterMovement()->CurrentFloor.HitResult.Normal;
+	//Need to see why character moves really far suddenly sometimes and slides normally other times
+	GetMovementComponent()->SlideAlongSurface(ForwardDirection * DashDistance, 1-FloorHit.Time, NormalFloor, FloorHit, true);
+	if (DashMontage)
+	{
+		PlayAnimMontage(DashMontage, 1, NAME_None);
+		
+	}
+	
+}
+
+void APlayerCharacter::SprintStart()
+{
+	GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
+	
+}
+
+void APlayerCharacter::SprintEnd()
+{
+	GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
 }
 
 bool APlayerCharacter::IsDead() const

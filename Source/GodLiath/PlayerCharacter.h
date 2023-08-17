@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/Actor.h"
 #include "PlayerCharacter.generated.h"
 
 class AGun;
@@ -36,12 +37,25 @@ public:
 	UFUNCTION(BlueprintPure)
 	float GetHealthPercent() const;
 
+	
+
 private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
 	void LookUpRate(float AxisValue);
 	void LookRightRate(float AxisValue);
 	void Shoot();
+	void Dash();
+	void SprintStart();
+	void SprintEnd();
+
+	
+
+	UPROPERTY(EditAnywhere)
+	float SprintSpeed = 1750;
+
+	UPROPERTY(EditAnywhere)
+	float NormalSpeed = 1250;
 
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 10;
@@ -57,5 +71,23 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	float Health;
+
+	UPROPERTY(EditAnywhere)
+	float DashDistance = 6000;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* DashMontage;
+
+	// UPROPERTY(VisibleAnywhere)
+	// USceneComponent* CharRoot;
+
+	// UPROPERTY(VisibleAnywhere)
+	// USkeletalMeshComponent* CharMesh;
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* JetpackEmitter;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* JetpackSound;
 
 };
