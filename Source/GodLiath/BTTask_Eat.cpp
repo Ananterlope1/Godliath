@@ -5,6 +5,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BerserkerCharacter.h"
 #include "AIController.h"
+#include "Kismet/GameplayStatics.h"
 
 
 UBTTask_Eat::UBTTask_Eat()
@@ -29,16 +30,21 @@ EBTNodeResult::Type UBTTask_Eat::ExecuteTask(UBehaviorTreeComponent &OwnerComp, 
     }
     
     Character->Eat();
+    
 
     FName EatableName = TEXT("ClosestEatableActor");
     AEnemyCharacter* ClosestEatableActor = Cast<AEnemyCharacter>(BlackboardComp->GetValueAsObject(EatableName)); 
-    FString ActorName = ClosestEatableActor->GetName();
-    UE_LOG(LogTemp, Warning, TEXT("ClosestEatable Actor Name: %s"), *ActorName);
-    bool EatableCheck = ClosestEatableActor->SetIsEatable(false);
     ClosestEatableActor->DetachFromControllerPendingDestroy();
-    UE_LOG(LogTemp, Error, TEXT("Eatable Check is: %s"), EatableCheck? TEXT("true") : TEXT("false"));
+    
+	UParticleSystem* EatenEmitter = ClosestEatableActor->GetEatenEmitter();
+    FVector EatableEmitterLocation = ClosestEatableActor->GetActorLocation();
+    if (EatenEmitter != nullptr)
+    {
+        UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), EatenEmitter, EatableEmitterLocation);
+    }       
 
-    //Once eaten then set eatable to false
+    ClosestEatableActor->SetActorHiddenInGame(true);
+    ClosestEatableActor->Destroy();
 
     return EBTNodeResult::Succeeded;
 }

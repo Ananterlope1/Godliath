@@ -40,8 +40,12 @@ float ABerserkerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent co
 		}else
 		{
 			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-			UE_LOG(LogTemp, Error, TEXT("Count to 5!"));
-			GetWorldTimerManager().SetTimer(ResurrectTimer, this, &ABerserkerCharacter::PlayResurrection, ResurrectDelay);
+			UE_LOG(LogTemp, Error, TEXT("Count to 5 resurrect!"));
+			FTimerHandle ResurrectHandle;
+			FTimerDelegate ResurrectDelegate;
+			ResurrectDelegate.BindUFunction( this, FName("PlayResurrection"));
+			GetWorldTimerManager().SetTimer(ResurrectHandle, ResurrectDelegate, ResurrectDelay, false);	
+			// GetWorldTimerManager().SetTimer(ResurrectTimer, this, &ABerserkerCharacter::PlayResurrection, ResurrectDelay, false);
 			UE_LOG(LogTemp, Warning, TEXT("Resurrecting Berserker Health!"));
 			
 			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
@@ -99,7 +103,6 @@ void ABerserkerCharacter::PlayResurrection()
 {
 	UE_LOG(LogTemp, Error, TEXT("Berserk Resurrection"));	
 	Health = MaxHealth;
-	IsDead();
-	
+	IsDead();	
 }
 

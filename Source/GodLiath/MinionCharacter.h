@@ -25,6 +25,4 @@ public:
 	bool IsDead();
 	
 	
-
-
 };

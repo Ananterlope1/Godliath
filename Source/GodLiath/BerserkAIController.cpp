@@ -18,3 +18,4 @@ bool ABerserkAIController::IsDead() const
 
     return true;
 }
+

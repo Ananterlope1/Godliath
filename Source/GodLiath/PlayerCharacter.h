@@ -90,4 +90,11 @@ private:
 	UPROPERTY(EditAnywhere)
 	USoundBase* JetpackSound;
 
+	UFUNCTION()
+	void EmitterDeactivate(TArray<UParticleSystemComponent*> SpawnedEmitters);
+
+	float EmitterDeactivateTimer = 1;
+
+	
+
 };

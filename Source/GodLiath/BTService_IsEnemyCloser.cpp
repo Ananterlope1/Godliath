@@ -31,17 +31,17 @@ void UBTService_IsEnemyCloser::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
     {
         UBlackboardComponent* BlackboardComp = OwnerComp.GetBlackboardComponent();
         FName EnemyKeyID = FName(TEXT("ClosestEnemyLocation"));
-        FVector ClosestEnemyLoc = BlackboardComp->GetValueAsVector(EnemyLocKey.SelectedKeyName);  
+        FVector ClosestEnemyLoc = BlackboardComp->GetValueAsVector(EnemyLocKey.SelectedKeyName); 
         // uint8* ClosestLocKey = BlackboardComp->GetK(KeyID);
         FName PlayerKeyID = FName(TEXT("LastKnownPlayerLocation"));
         FVector ClosestPlayerLoc = BlackboardComp->GetValueAsVector(PlayerLocKey.SelectedKeyName);  
-        
-        
+                
         // UE_LOG(LogTemp, Display, TEXT("ClosestEnemyLocKey: %s"), *ClosestEnemyLoc.ToString());
         // UE_LOG(LogTemp, Display, TEXT("ClosestPlayerLocKey: %s"), *ClosestPlayerLoc.ToString());
 
         if (FVector::Dist(OwnerLocation, ClosestEnemyLoc) < FVector::Dist(OwnerLocation, ClosestPlayerLoc))
         {
+            
             OwnerComp.GetBlackboardComponent()->SetValueAsBool(GetSelectedBlackboardKey(), true);
         }else
         {

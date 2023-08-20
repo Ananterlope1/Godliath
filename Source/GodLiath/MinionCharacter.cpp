@@ -22,11 +22,7 @@ float AMinionCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const
 		UE_LOG(LogTemp, Error, TEXT("Minion Dead"));
 		Eatable = true;
 		// Need to set this after being eaten or it stops checks on this minion.
-
-        // DetachFromControllerPendingDestroy();
-
-		
-		
+        // DetachFromControllerPendingDestroy();		
 		
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		
@@ -43,7 +39,9 @@ float AMinionCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const
 
 bool AMinionCharacter::IsDead() 
 {	
-
+	if(this->IsPendingKillPending())
+	{
+		return true;
+	}
 	return Health <= 0;
-
 }

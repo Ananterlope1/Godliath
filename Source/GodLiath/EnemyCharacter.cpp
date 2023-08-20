@@ -114,3 +114,8 @@ bool AEnemyCharacter::SetIsEatable(bool SetIsEatable)
 	Eatable = SetIsEatable;
 	return Eatable;
 }
+
+UParticleSystem* AEnemyCharacter::GetEatenEmitter()
+{
+	return EatenEmitter;
+}

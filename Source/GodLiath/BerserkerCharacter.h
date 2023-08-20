@@ -48,6 +48,9 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool IsTrueDead() const;
 
+	UFUNCTION()
+	void PlayResurrection();
+
 private:
 
 	UPROPERTY(EditAnywhere)
@@ -58,6 +61,6 @@ private:
 
 	FTimerHandle ResurrectTimer;
 
-	void PlayResurrection();
+	
 	
 };

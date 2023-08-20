@@ -28,18 +28,22 @@ void UBTService_ClosestEnemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
     FVector ChosenClosestEnemyLocation;
     // Bool to say whether enemy location has been changed
     bool CheckForVectorChange = false;
+    bool EnemyDetected = false;
+    FVector PreviousClosestEnemyLocation;
 
-    UE_LOG(LogTemp, Warning, TEXT("Chosen Enemy location changed?: %s"), CheckForVectorChange? TEXT("true") : TEXT("false"));
+    // UE_LOG(LogTemp, Warning, TEXT("Chosen Enemy location changed?: %s"), CheckForVectorChange? TEXT("true") : TEXT("false"));
 
      // Check over all the Enemy actors and find the closest one.
     for (AEnemyAIController* EnemyAI : TActorRange<AEnemyAIController>(GetWorld()))
     {
-        // UE_LOG(LogTemp, Display, TEXT("Check EnemyAI loop"));
+        UE_LOG(LogTemp, Display, TEXT("Check EnemyAI loop"));
+        //Check that enemy isn't dead/ eatable and not the current AI
         if (EnemyAI->IsDead() == false && EnemyAI != SelfAI)
         {
-            // UE_LOG(LogTemp, Display, TEXT("Check EnemyAliveAI loop"));
+            UE_LOG(LogTemp, Display, TEXT("Check EnemyAliveAI loop"));
 
             ThisEnemyLocation = EnemyAI->GetPawn()->GetActorLocation();
+            EnemyDetected = true;
 
             if (FVector::Dist(OwnerLocation, ThisEnemyLocation) <= FVector::Dist(OwnerLocation, PreviousClosestEnemyLocation))
             {
@@ -47,17 +51,20 @@ void UBTService_ClosestEnemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
                 CheckForVectorChange = true;
                 EnemyPawn = Cast<AEnemyCharacter>(EnemyAI->GetPawn());
                 FString EnemyName = EnemyPawn->GetName();
-                // UE_LOG(LogTemp, Error, TEXT("Line Of Sight to Enemy: %s"), *EnemyName);
+                UE_LOG(LogTemp, Error, TEXT("Line Of Sight to Enemy: %s"), *EnemyName);
+                FString EnemyLoc = ChosenClosestEnemyLocation.ToCompactString();
+                UE_LOG(LogTemp, Error, TEXT("Enemy Location: %s"), *EnemyLoc);
             }
             PreviousClosestEnemyLocation = ChosenClosestEnemyLocation;
+            UE_LOG(LogTemp, Warning, TEXT("Chosen Enemy location changed in loop?: %s"), CheckForVectorChange? TEXT("true") : TEXT("false"));
         }      
 
     }
 
-    // UE_LOG(LogTemp, Warning, TEXT("Exit EnemyAI loop"));
+    UE_LOG(LogTemp, Warning, TEXT("Exit EnemyAI loop"));
     
-    FString ChosenEatVec = ChosenClosestEnemyLocation.ToCompactString();
-    UE_LOG(LogTemp, Error, TEXT("The returned chosen location: %s"), *ChosenEatVec);
+    // FString ChosenEatVec = ChosenClosestEnemyLocation.ToCompactString();
+    // UE_LOG(LogTemp, Error, TEXT("The returned chosen location: %s"), *ChosenEatVec);
 
     UE_LOG(LogTemp, Warning, TEXT("Chosen Enemy location changed?: %s"), CheckForVectorChange? TEXT("true") : TEXT("false"));
             

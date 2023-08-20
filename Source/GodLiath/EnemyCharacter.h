@@ -36,7 +36,7 @@ public:
 	void SwingWeapon();
 
 	UPROPERTY(VisibleAnywhere)
-	float Health;
+	float Health = 1;
 
 	UPROPERTY(EditDefaultsOnly)
 	float MaxHealth = 100;
@@ -49,6 +49,8 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	bool SetIsEatable(bool SetIsEatable);
+	
+	UParticleSystem* GetEatenEmitter();
 
 private:
 
@@ -66,6 +68,9 @@ private:
 
 	UPROPERTY()
 	AMeleeWeapon* MeleeWeapon;
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* EatenEmitter;
 	
 
 };

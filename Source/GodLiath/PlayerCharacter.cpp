@@ -8,6 +8,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/MovementComponent.h"
 #include "GodLiathGameModeBase.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "TimerManager.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -123,8 +125,11 @@ void APlayerCharacter::Shoot()
 void APlayerCharacter::Dash()
 {
 	// For adding emitters and sound to dash
-	UGameplayStatics::SpawnEmitterAttached(JetpackEmitter, GetMesh(), TEXT("JetpackEmitter_L"));
-	UGameplayStatics::SpawnEmitterAttached(JetpackEmitter, GetMesh(), TEXT("JetpackEmitter_R"));
+	TArray<UParticleSystemComponent*> SpawnedEmitters;
+
+	SpawnedEmitters.Add(UGameplayStatics::SpawnEmitterAttached(JetpackEmitter, GetMesh(), TEXT("JetpackEmitter_L")));
+	SpawnedEmitters.Add(UGameplayStatics::SpawnEmitterAttached(JetpackEmitter, GetMesh(), TEXT("JetpackEmitter_R")));
+
 	UGameplayStatics::SpawnSoundAttached(JetpackSound, GetMesh(), TEXT("JetpackEmitter_L"));
 	UGameplayStatics::SpawnSoundAttached(JetpackSound, GetMesh(), TEXT("JetpackEmitter_R"));
 
@@ -141,7 +146,21 @@ void APlayerCharacter::Dash()
 		PlayAnimMontage(DashMontage, 1, NAME_None);
 		
 	}
-	
+	FTimerHandle EmitterHandle;
+	FTimerDelegate DisableDelegate;
+	DisableDelegate.BindUFunction( this, FName("EmitterDeactivate"), SpawnedEmitters);
+	GetWorldTimerManager().SetTimer(EmitterHandle, DisableDelegate, EmitterDeactivateTimer, false);	
+}
+
+void APlayerCharacter::EmitterDeactivate(TArray<UParticleSystemComponent*> SpawnedEmitters)
+{
+	for (UParticleSystemComponent* Emitter : SpawnedEmitters)
+	{
+		if (Emitter)
+		{
+			Emitter->DeactivateImmediate();
+		}		
+	}	
 }
 
 void APlayerCharacter::SprintStart()
@@ -155,6 +174,8 @@ void APlayerCharacter::SprintEnd()
 	GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
 }
 
+
+
 bool APlayerCharacter::IsDead() const
 {	
 	return Health <= 0;
@@ -164,3 +185,5 @@ float APlayerCharacter::GetHealthPercent() const
 {
 	return Health / MaxHealth;
 }
+
+
