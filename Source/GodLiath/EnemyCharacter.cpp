@@ -22,10 +22,14 @@ void AEnemyCharacter::BeginPlay()
 
 	Health = MaxHealth;	
 
-	MeleeWeapon = GetWorld()->SpawnActor<AMeleeWeapon>(MeleeClass);
+	if (MeleeClass)
+	{
+		MeleeWeapon = GetWorld()->SpawnActor<AMeleeWeapon>(MeleeClass);
 
-	MeleeWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("MeleeWeapon_R"));
-	MeleeWeapon->SetOwner(this);
+		MeleeWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("MeleeWeapon_R"));
+		MeleeWeapon->SetOwner(this);
+	}
+	
 	
 }
 

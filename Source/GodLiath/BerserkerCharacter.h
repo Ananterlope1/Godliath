@@ -48,6 +48,9 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool IsTrueDead() const;
 
+	UFUNCTION(BlueprintPure)
+	bool SetTrueDead(bool TrueDeathValue);
+
 	UFUNCTION()
 	void PlayResurrection();
 
@@ -58,6 +61,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	FVector EatingScale = FVector(1.2, 1.2, 1.2);
+
+	UPROPERTY(EditAnywhere)
+	FVector BossCaptureScale = FVector(2.2, 2.2, 2.2);
 
 	FTimerHandle ResurrectTimer;
 

@@ -55,8 +55,7 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
         {
             Rotator->SetShouldMove(true);
 			// UE_LOG(LogTemp, Warning, TEXT("Unlocking"));
-        }
-        
+        }        
 		
 		// UE_LOG(LogTemp, Warning, TEXT("Unlocking"));
 

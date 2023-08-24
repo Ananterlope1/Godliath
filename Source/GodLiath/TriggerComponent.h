@@ -34,6 +34,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetRotator( URotatorComponent* Rotator);
+	
 
 private:
 

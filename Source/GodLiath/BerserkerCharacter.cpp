@@ -86,6 +86,11 @@ void ABerserkerCharacter::Eat()
 	FVector CurrentScale = this->GetActorScale3D();
 	CurrentScale += EatingScale;
 	this->SetActorScale3D(CurrentScale);
+	if (CurrentScale.X >= BossCaptureScale.X)
+	{
+		this->Tags.AddUnique(FName(TEXT("BossOpen")));
+	}
+	
 	// In animation, set the eating back to false with delay if true?
 }
 
@@ -96,6 +101,12 @@ bool ABerserkerCharacter::IsEating() const
 
 bool ABerserkerCharacter::IsTrueDead() const
 {
+	return TrueDeath;
+}
+
+bool ABerserkerCharacter::SetTrueDead(bool TrueDeathValue)
+{
+	TrueDeath = TrueDeathValue;
 	return TrueDeath;
 }
 
