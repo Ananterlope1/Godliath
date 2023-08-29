@@ -40,12 +40,9 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 		// If wanting the pawn or actor to stay stuck to the moving object.
 		// UPrimitiveComponent* Component = Cast<UPrimitiveComponent>(Actor->GetRootComponent());
 		// if (Component != nullptr)
-		// {	
-			
+		// {				
 		// 	Component->SetSimulatePhysics(false);
 		// 	Actor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
-			
-
 		// }
 		
         if (Mover != nullptr)

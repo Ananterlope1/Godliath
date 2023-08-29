@@ -89,6 +89,11 @@ void AGun::PullTrigger()
 				HitActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
 			}else
 			{
+				FPointDamageEvent DamageEvent(Damage, HitResult, ShotDirection, nullptr);
+				AController* OwnerController = GetOwnerController();
+				HitActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
+				FString HitActorName = HitActor->GetName();
+				UE_LOG(LogTemp, Display, TEXT("Hitting without damage %s"), *HitActor->GetName());
 				UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ImpactSoundEnv, HitResult.Location, ShotDirection.Rotation());
 			}
 			

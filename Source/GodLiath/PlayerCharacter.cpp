@@ -11,6 +11,7 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "TimerManager.h"
 #include "Kismet/GameplayStatics.h"
+#include "Engine/World.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -39,7 +40,6 @@ void APlayerCharacter::BeginPlay()
 
 	Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
 	Gun->SetOwner(this);
-
 	
 }
 
@@ -66,6 +66,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent -> BindAction(TEXT("Dash"), EInputEvent::IE_Pressed, this, &APlayerCharacter::Dash);
 	PlayerInputComponent -> BindAction(TEXT("Sprint"), EInputEvent::IE_Pressed, this, &APlayerCharacter::SprintStart);
 	PlayerInputComponent -> BindAction(TEXT("Sprint"), EInputEvent::IE_Released, this, &APlayerCharacter::SprintEnd);
+	PlayerInputComponent -> BindAction(TEXT("CaptureGrenade"), EInputEvent::IE_Pressed, this, &APlayerCharacter::CaptureGrenadeThrow);
 
 }
 
@@ -146,6 +147,7 @@ void APlayerCharacter::Dash()
 		PlayAnimMontage(DashMontage, 1, NAME_None);
 		
 	}
+	// Setup the timer to despawn the emitters
 	FTimerHandle EmitterHandle;
 	FTimerDelegate DisableDelegate;
 	DisableDelegate.BindUFunction( this, FName("EmitterDeactivate"), SpawnedEmitters);
@@ -174,7 +176,18 @@ void APlayerCharacter::SprintEnd()
 	GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
 }
 
+void APlayerCharacter::CaptureGrenadeThrow()
+{
+	UE_LOG(LogTemp, Display, TEXT("Throwing Grenade"));
 
+	if (GrenadeMontage)
+	{
+		PlayAnimMontage(GrenadeMontage, 1, NAME_None);		
+	}
+
+	// UWorld::SpawnActor()
+
+}
 
 bool APlayerCharacter::IsDead() const
 {	

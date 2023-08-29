@@ -48,6 +48,7 @@ private:
 	void Dash();
 	void SprintStart();
 	void SprintEnd();
+	void CaptureGrenadeThrow();
 
 	
 
@@ -95,6 +96,7 @@ private:
 
 	float EmitterDeactivateTimer = 1;
 
-	
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* GrenadeMontage;
 
 };
