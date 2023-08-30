@@ -37,4 +37,9 @@ void AMainPlayer_Controller::GameHasEnded(class AActor* EndGameFocus, bool bIsWi
     GetWorldTimerManager().SetTimer(RestartTimer, this, &APlayerController::RestartLevel, RestartDelay);
 }
 
+UUserWidget* AMainPlayer_Controller::GetPlayerHUD()
+{
+    return HUD;
+}
+
 

@@ -20,7 +20,9 @@ protected:
 
 public:
 	virtual void GameHasEnded(class AActor* EndGameFocus = nullptr, bool bIsWinner = false) override;
-
+	
+	UFUNCTION(BlueprintCallable)
+	UUserWidget* GetPlayerHUD();
 
 private:
 	UPROPERTY(EditAnywhere)
