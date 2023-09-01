@@ -19,3 +19,16 @@ bool ABerserkAIController::IsDead() const
     return true;
 }
 
+bool ABerserkAIController::IsTrueDead() const
+{
+    ABerserkerCharacter* ControlledCharacter = Cast<ABerserkerCharacter>(GetPawn());
+    if (ControlledCharacter != nullptr)
+    {
+        // bool isBerserkerDead = ControlledCharacter->IsDead();
+        // UE_LOG(LogTemp, Warning, TEXT("Berserker ControlledCharacter Is Dead? %s"), isBerserkerDead? TEXT("true") : TEXT("false"));
+        
+        return ControlledCharacter->IsTrueDead();
+    }
+
+    return true;
+}

@@ -21,7 +21,7 @@ void AKillTheGodliathGameMode::PawnKilled(APawn* PawnKilled)
     //For check over the BerserkerAI. Might be more in later levels so for loop.
     for (ABerserkAIController* Controller : TActorRange<ABerserkAIController>(GetWorld()))
     {
-        if (!Controller->IsDead())
+        if (!Controller->IsTrueDead())
         {
             //Early return as game not over yet
             return;

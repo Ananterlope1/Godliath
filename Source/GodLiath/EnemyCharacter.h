@@ -33,7 +33,7 @@ public:
 	// UFUNCTION(BlueprintPure)
 	// virtual bool IsDead() const;
 
-	void SwingWeapon();
+	virtual void SwingWeapon();
 
 	UPROPERTY(VisibleAnywhere)
 	float Health = 1;
@@ -52,6 +52,12 @@ public:
 	
 	UParticleSystem* GetEatenEmitter();
 
+	void SetRotationRate();
+
+	
+	UPROPERTY()
+	AMeleeWeapon* MeleeWeapon;
+
 private:
 
 	void MoveForward(float AxisValue);
@@ -61,13 +67,11 @@ private:
 	
 
 	UPROPERTY(EditAnywhere)
-	float RotationRate = 10;
+	float RotationRate = 10.0f;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AMeleeWeapon> MeleeClass;
 
-	UPROPERTY()
-	AMeleeWeapon* MeleeWeapon;
 
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* EatenEmitter;

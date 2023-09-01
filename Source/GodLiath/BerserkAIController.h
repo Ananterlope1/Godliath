@@ -18,5 +18,5 @@ class GODLIATH_API ABerserkAIController : public AEnemyAIController
 
 public:
 	bool IsDead() const override;
-
+	bool IsTrueDead() const;
 };

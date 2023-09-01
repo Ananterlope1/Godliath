@@ -33,20 +33,19 @@ void UBTService_ClosestEatable::TickNode(UBehaviorTreeComponent& OwnerComp, uint
     // Check over all the eatable actors and find the closest one.
     for (AMinionCharacter* MinionChar : TActorRange<AMinionCharacter>(GetWorld()))
     {
-        // UE_LOG(LogTemp, Display, TEXT("Entering Eatable Minion Loop"));
+        UE_LOG(LogTemp, Display, TEXT("Entering Eatable Minion Loop"));
                 
         if (MinionChar->IsEatable() == true)
         {
-            // UE_LOG(LogTemp, Display, TEXT("Check eatable loop"));
+            UE_LOG(LogTemp, Display, TEXT("Check eatable loop"));
             EatableDetected = true;
             ThisEatableLocation = MinionChar->GetTransform().GetLocation();
             // FString CheckEatVec = ThisEatableLocation.ToCompactString();
             // UE_LOG(LogTemp, Error, TEXT("The checked eatable location: %s"), *CheckEatVec);
-
             
             // ThisEatableLocation = MinionAI->GetPawn()->GetActorLocation();
 
-            if (FVector::Dist(OwnerLocation, ThisEatableLocation) <= FVector::Dist(OwnerLocation, PreviousClosestEatableLocation))
+            if (FVector::Dist(OwnerLocation, ThisEatableLocation) <= FVector::Dist(OwnerLocation, PreviousClosestEatableLocation) || OwnerComp.GetAIOwner()->LineOfSightTo(MinionChar))
             {
                 ChosenClosestEatableLocation = ThisEatableLocation;
                 CheckForVectorChange = true;
@@ -57,17 +56,14 @@ void UBTService_ClosestEatable::TickNode(UBehaviorTreeComponent& OwnerComp, uint
             PreviousClosestEatableLocation = ChosenClosestEatableLocation;
         }      
 
-    }
-
-    
+    }   
 
     // UE_LOG(LogTemp, Warning, TEXT("Exit eatable loop"));
     
     // FString ChosenEatVec = ChosenClosestEatableLocation.ToCompactString();
     // UE_LOG(LogTemp, Error, TEXT("The returned eatable location: %s"), *ChosenEatVec);
-
             
-    if (EatableDetected && OwnerComp.GetAIOwner()->LineOfSightTo(EatablePawn))
+    if (CheckForVectorChange && OwnerComp.GetAIOwner()->LineOfSightTo(EatablePawn))
     {
         // UE_LOG(LogTemp, Display, TEXT("Setting Line of sight to eatable"));
         OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), ChosenClosestEatableLocation);

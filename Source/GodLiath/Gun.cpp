@@ -52,7 +52,7 @@ bool AGun::GunTrace(FHitResult& HitResult, FVector& ShotDirection)
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
 	Params.AddIgnoredActor(GetOwner());
-	DrawDebugLine(GetWorld(), OwnerLocation, End, FColor::Green, true, 30 );
+	// DrawDebugLine(GetWorld(), OwnerLocation, End, FColor::Green, true, 0.1 );
 	return GetWorld()->LineTraceSingleByChannel(HitResult, OwnerLocation, End, ECollisionChannel::ECC_GameTraceChannel1, Params);
 }
 

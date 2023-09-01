@@ -6,6 +6,7 @@
 #include "MeleeWeapon.h"
 #include "Components/CapsuleComponent.h"
 #include "GodLiathGameModeBase.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
@@ -30,6 +31,7 @@ void AEnemyCharacter::BeginPlay()
 		MeleeWeapon->SetOwner(this);
 	}
 	
+	GetCharacterMovement()->RotationRate = FRotator(RotationRate, RotationRate, RotationRate);
 	
 }
 
@@ -105,11 +107,6 @@ void AEnemyCharacter::LookRightRate(float AxisValue)
 
 bool AEnemyCharacter::IsEatable()
 {
-	// if (Eatable)
-	// {
-	// 	this->Tags.Add(FName("Eatable"));
-	// }
-	
 	return Eatable;
 }
 
@@ -122,4 +119,10 @@ bool AEnemyCharacter::SetIsEatable(bool SetIsEatable)
 UParticleSystem* AEnemyCharacter::GetEatenEmitter()
 {
 	return EatenEmitter;
+}
+
+void AEnemyCharacter::SetRotationRate()
+{
+	GetCharacterMovement()->RotationRate = FRotator(RotationRate, RotationRate, RotationRate);
+	
 }

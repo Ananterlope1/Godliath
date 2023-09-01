@@ -54,6 +54,8 @@ public:
 	UFUNCTION()
 	void PlayResurrection();
 
+	virtual void SwingWeapon() override;
+
 private:
 
 	UPROPERTY(EditAnywhere)
@@ -63,13 +65,20 @@ private:
 	FVector EatingScale = FVector(0.2, 0.2, 0.2);
 
 	UPROPERTY(EditAnywhere)
-	FVector BossCaptureScale = FVector(3.2, 3.2, 3.2);
+	float ScalingEating = 1.1;
+
+	UPROPERTY(EditAnywhere)
+	FVector BossCaptureScale = FVector(2.5, 2.5, 2.5);
 
 	UPROPERTY(EditAnywhere)
 	FVector CargoOpenScale = FVector(1.8, 1.8, 1.8);
 
-	FTimerHandle ResurrectTimer;
+	FTimerHandle ResurrectTimer;	
 
-	
+	UPROPERTY(EditAnywhere)
+	USoundBase* AttackSound;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* EatSound;
 	
 };

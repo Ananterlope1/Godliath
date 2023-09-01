@@ -49,7 +49,7 @@ private:
 	USoundBase* ImpactSoundEnemy;
 
 	UPROPERTY(EditAnywhere)
-	float MaxRange = 1000;
+	float MaxRange = 3000;
 
 	UPROPERTY(EditAnywhere)
 	float Damage = 10;

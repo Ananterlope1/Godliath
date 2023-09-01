@@ -6,7 +6,10 @@
 #include "TimerManager.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "GodLiathGameModeBase.h"
-
+#include "MeleeWeapon.h"
+#include "EnemyCharacter.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 
 void ABerserkerCharacter::BeginPlay()
@@ -82,9 +85,16 @@ void ABerserkerCharacter::Eat()
 	// Check boolean selector for dead enemy in range. 
 	// BTService for enemy dead/eatable location
 	// BTTask for eat with animation and gibs
+	if (EatSound)
+	{
+	UGameplayStatics::SpawnSoundAttached(EatSound, GetMesh(), TEXT("Status"));
+	}
+	
+
 	Eating = true;
 	FVector CurrentScale = this->GetActorScale3D();
-	CurrentScale += EatingScale;
+	CurrentScale *= ScalingEating;
+	// CurrentScale += EatingScale;
 	this->SetActorScale3D(CurrentScale);
 	if (CurrentScale.X >= CargoOpenScale.X)
 	{
@@ -94,8 +104,22 @@ void ABerserkerCharacter::Eat()
 	{
 		this->Tags.AddUnique(FName(TEXT("BossOpen")));
 	}
-	
-	// In animation, set the eating back to false with delay if true?
+
+	Eating = false;
+	float CurrentMaxRange = this->MeleeWeapon->GetMaxRange();
+	CurrentMaxRange *= ScalingEating;
+	this->MeleeWeapon->SetMaxRange(CurrentMaxRange);
+
+	float CurrentDamage = this->MeleeWeapon->GetDamage();
+	CurrentDamage *= ScalingEating;
+	this->MeleeWeapon->SetDamage(CurrentDamage);
+
+	float CurrentWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	CurrentWalkSpeed *= ScalingEating;
+	GetCharacterMovement()->MaxWalkSpeed = CurrentWalkSpeed;
+
+	MaxHealth *= ScalingEating;
+
 }
 
 bool ABerserkerCharacter::IsEating() const
@@ -119,5 +143,15 @@ void ABerserkerCharacter::PlayResurrection()
 	UE_LOG(LogTemp, Error, TEXT("Berserk Resurrection"));	
 	Health = MaxHealth;
 	IsDead();	
+}
+
+void ABerserkerCharacter::SwingWeapon()
+{
+	Super::SwingWeapon();
+	if (AttackSound)
+	{
+		UGameplayStatics::SpawnSoundAttached(AttackSound, GetMesh(), TEXT("Status"));
+	}
+
 }
 

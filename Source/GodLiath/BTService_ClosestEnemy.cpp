@@ -29,7 +29,7 @@ void UBTService_ClosestEnemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
     // Bool to say whether enemy location has been changed
     bool CheckForVectorChange = false;
     bool EnemyDetected = false;
-    FVector PreviousClosestEnemyLocation;
+    // FVector PreviousClosestEnemyLocation;
 
     // UE_LOG(LogTemp, Warning, TEXT("Chosen Enemy location changed?: %s"), CheckForVectorChange? TEXT("true") : TEXT("false"));
 
@@ -40,20 +40,21 @@ void UBTService_ClosestEnemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
         //Check that enemy isn't dead/ eatable and not the current AI
         if (EnemyAI->IsDead() == false && EnemyAI != SelfAI)
         {
-            // UE_LOG(LogTemp, Display, TEXT("Check EnemyAliveAI loop"));
+            UE_LOG(LogTemp, Display, TEXT("Check EnemyAliveAI loop"));
 
             ThisEnemyLocation = EnemyAI->GetPawn()->GetActorLocation();
             EnemyDetected = true;
+            // OwnerComp.GetAIOwner()->LineOfSightTo(EnemyAI->GetPawn()) ||
 
-            if (FVector::Dist(OwnerLocation, ThisEnemyLocation) <= FVector::Dist(OwnerLocation, PreviousClosestEnemyLocation))
+            if (FVector::Dist(OwnerLocation, ThisEnemyLocation) <= FVector::Dist(OwnerLocation, PreviousClosestEnemyLocation) || OwnerComp.GetAIOwner()->LineOfSightTo(EnemyAI->GetPawn()))
             {
                 ChosenClosestEnemyLocation = ThisEnemyLocation;
                 CheckForVectorChange = true;
                 EnemyPawn = Cast<AEnemyCharacter>(EnemyAI->GetPawn());
                 FString EnemyName = EnemyPawn->GetName();
-                // UE_LOG(LogTemp, Error, TEXT("Line Of Sight to Enemy: %s"), *EnemyName);
-                // FString EnemyLoc = ChosenClosestEnemyLocation.ToCompactString();
-                // UE_LOG(LogTemp, Error, TEXT("Enemy Location: %s"), *EnemyLoc);
+                UE_LOG(LogTemp, Error, TEXT("Line Of Sight to Enemy: %s"), *EnemyName);
+                FString EnemyLoc = ChosenClosestEnemyLocation.ToCompactString();
+                UE_LOG(LogTemp, Error, TEXT("Enemy Location: %s"), *EnemyLoc);
             }
             PreviousClosestEnemyLocation = ChosenClosestEnemyLocation;
             // UE_LOG(LogTemp, Warning, TEXT("Chosen Enemy location changed in loop?: %s"), CheckForVectorChange? TEXT("true") : TEXT("false"));
@@ -67,22 +68,21 @@ void UBTService_ClosestEnemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
     // UE_LOG(LogTemp, Error, TEXT("The returned chosen location: %s"), *ChosenEatVec);
 
     // UE_LOG(LogTemp, Warning, TEXT("Chosen Enemy location changed?: %s"), CheckForVectorChange? TEXT("true") : TEXT("false"));
-            
-    if (EnemyDetected && OwnerComp.GetAIOwner()->LineOfSightTo(EnemyPawn))
+//    && OwnerComp.GetAIOwner()->LineOfSightTo(EnemyPawn)
+    if (CheckForVectorChange && OwnerComp.GetAIOwner()->LineOfSightTo(EnemyPawn))
     {
-        // UE_LOG(LogTemp, Display, TEXT("Setting Line of sight to Enemy"));
+        FString EnemyName = EnemyPawn->GetName();
+        UE_LOG(LogTemp, Display, TEXT("Setting Line of sight to Enemy %s"), *EnemyName);
         OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), ChosenClosestEnemyLocation);
         OwnerComp.GetBlackboardComponent()->SetValueAsObject(EnemyActorKey.SelectedKeyName, EnemyPawn);
-
     }
     else
     {
-        // UE_LOG(LogTemp, Error, TEXT("Clearing values of Enemy"));
+        UE_LOG(LogTemp, Error, TEXT("Clearing values of Enemy"));
         OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
         OwnerComp.GetBlackboardComponent()->ClearValue(EnemyActorKey.SelectedKeyName);
 
     }
-
-
+    
 
 }

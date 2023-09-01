@@ -24,6 +24,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UUserWidget* GetPlayerHUD();
 
+	UFUNCTION(BlueprintPure)
+	bool ReturnToMain() const;
+
 private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UUserWidget> LoseScreenClass;

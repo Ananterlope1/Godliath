@@ -4,6 +4,8 @@
 #include "MainPlayer_Controller.h"
 #include "TimerManager.h"
 #include "Blueprint/UserWidget.h"
+#include "Kismet/GameplayStatics.h"
+
 
 void AMainPlayer_Controller::BeginPlay()
 {
@@ -23,6 +25,10 @@ void AMainPlayer_Controller::GameHasEnded(class AActor* EndGameFocus, bool bIsWi
         if (WinScreen != nullptr)
         {
             WinScreen->AddToViewport();
+            FTimerHandle Handle;
+	        FTimerDelegate Delegate;
+	        Delegate.BindUFunction( this, FName("ReturnToMain"));
+            GetWorldTimerManager().SetTimer(Handle, Delegate, RestartDelay, false);
         }
     }else
     {
@@ -31,15 +37,23 @@ void AMainPlayer_Controller::GameHasEnded(class AActor* EndGameFocus, bool bIsWi
         if (LoseScreen != nullptr)
         {            
             LoseScreen->AddToViewport();
+            GetWorldTimerManager().SetTimer(RestartTimer, this, &APlayerController::RestartLevel, RestartDelay);
+
         }
     }
 
-    GetWorldTimerManager().SetTimer(RestartTimer, this, &APlayerController::RestartLevel, RestartDelay);
+    // GetWorldTimerManager().SetTimer(RestartTimer, this, &APlayerController::RestartLevel, RestartDelay);
 }
 
 UUserWidget* AMainPlayer_Controller::GetPlayerHUD()
 {
     return HUD;
+}
+
+bool AMainPlayer_Controller::ReturnToMain() const
+{
+    UGameplayStatics::OpenLevel(GetWorld(), FName("/Game/MenuLevel"), TRAVEL_Absolute);
+    return true;
 }
 
 

@@ -52,7 +52,7 @@ bool AMeleeWeapon::MeleeTrace(FHitResult& HitResult, FVector& ShotDirection)
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
 	Params.AddIgnoredActor(GetOwner());
-	DrawDebugLine(GetWorld(), OwnerLocation, End, FColor::Green, true, 30 );
+	// DrawDebugLine(GetWorld(), OwnerLocation, End, FColor::Green, true, 30 );
 	return GetWorld()->LineTraceSingleByChannel(HitResult, OwnerLocation, End, ECollisionChannel::ECC_GameTraceChannel1, Params);
 
 }
@@ -63,6 +63,26 @@ AController* AMeleeWeapon::GetOwnerController() const
 	if (OwnerPawn == nullptr) 
 		return nullptr;
 	return OwnerPawn->GetController();
+}
+
+void AMeleeWeapon::SetMaxRange(float NewMaxRange)
+{
+	MaxRange = NewMaxRange;
+}
+
+float AMeleeWeapon::GetMaxRange()
+{
+	return MaxRange;
+}
+
+void AMeleeWeapon::SetDamage(float NewDamage)
+{
+	Damage = NewDamage;
+}
+
+float AMeleeWeapon::GetDamage()
+{
+	return Damage;
 }
 
 void AMeleeWeapon::SwingWeapon()

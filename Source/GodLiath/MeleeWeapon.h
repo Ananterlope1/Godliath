@@ -50,4 +50,9 @@ public:
 
 	AController* GetOwnerController() const;
 
+	void SetMaxRange(float NewMaxRange);
+	float GetMaxRange();
+
+	void SetDamage(float NewDamage);
+	float GetDamage();
 };
