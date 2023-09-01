@@ -60,10 +60,13 @@ private:
 	float ResurrectDelay = 3;
 
 	UPROPERTY(EditAnywhere)
-	FVector EatingScale = FVector(1.2, 1.2, 1.2);
+	FVector EatingScale = FVector(0.2, 0.2, 0.2);
 
 	UPROPERTY(EditAnywhere)
-	FVector BossCaptureScale = FVector(2.2, 2.2, 2.2);
+	FVector BossCaptureScale = FVector(3.2, 3.2, 3.2);
+
+	UPROPERTY(EditAnywhere)
+	FVector CargoOpenScale = FVector(1.8, 1.8, 1.8);
 
 	FTimerHandle ResurrectTimer;
 

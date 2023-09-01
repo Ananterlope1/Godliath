@@ -26,7 +26,7 @@ void UBTService_ClosestEatable::TickNode(UBehaviorTreeComponent& OwnerComp, uint
     FVector ChosenClosestEatableLocation;
     // Bool to say whether enemy location has been changed
     bool CheckForVectorChange = false;
-
+    bool EatableDetected = false;
     // UE_LOG(LogTemp, Warning, TEXT("Chosen Eatable location changed?: %s"), CheckForVectorChange? TEXT("true") : TEXT("false"));
 
 
@@ -38,7 +38,7 @@ void UBTService_ClosestEatable::TickNode(UBehaviorTreeComponent& OwnerComp, uint
         if (MinionChar->IsEatable() == true)
         {
             // UE_LOG(LogTemp, Display, TEXT("Check eatable loop"));
-
+            EatableDetected = true;
             ThisEatableLocation = MinionChar->GetTransform().GetLocation();
             // FString CheckEatVec = ThisEatableLocation.ToCompactString();
             // UE_LOG(LogTemp, Error, TEXT("The checked eatable location: %s"), *CheckEatVec);
@@ -67,7 +67,7 @@ void UBTService_ClosestEatable::TickNode(UBehaviorTreeComponent& OwnerComp, uint
     // UE_LOG(LogTemp, Error, TEXT("The returned eatable location: %s"), *ChosenEatVec);
 
             
-    if (CheckForVectorChange && OwnerComp.GetAIOwner()->LineOfSightTo(EatablePawn))
+    if (EatableDetected && OwnerComp.GetAIOwner()->LineOfSightTo(EatablePawn))
     {
         // UE_LOG(LogTemp, Display, TEXT("Setting Line of sight to eatable"));
         OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), ChosenClosestEatableLocation);

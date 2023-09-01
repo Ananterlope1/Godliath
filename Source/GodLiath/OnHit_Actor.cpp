@@ -12,7 +12,7 @@ AOnHit_Actor::AOnHit_Actor()
 
 	// Setup overlap box
 	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Box"));
-	
+	SetRootComponent(HitBox);
 
 }
 

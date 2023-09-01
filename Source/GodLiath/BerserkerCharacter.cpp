@@ -86,6 +86,10 @@ void ABerserkerCharacter::Eat()
 	FVector CurrentScale = this->GetActorScale3D();
 	CurrentScale += EatingScale;
 	this->SetActorScale3D(CurrentScale);
+	if (CurrentScale.X >= CargoOpenScale.X)
+	{
+		this->Tags.AddUnique(FName(TEXT("CargoBayOpen")));
+	}
 	if (CurrentScale.X >= BossCaptureScale.X)
 	{
 		this->Tags.AddUnique(FName(TEXT("BossOpen")));

@@ -68,7 +68,7 @@ void UBTService_ClosestEnemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 
     // UE_LOG(LogTemp, Warning, TEXT("Chosen Enemy location changed?: %s"), CheckForVectorChange? TEXT("true") : TEXT("false"));
             
-    if (CheckForVectorChange && OwnerComp.GetAIOwner()->LineOfSightTo(EnemyPawn))
+    if (EnemyDetected && OwnerComp.GetAIOwner()->LineOfSightTo(EnemyPawn))
     {
         // UE_LOG(LogTemp, Display, TEXT("Setting Line of sight to Enemy"));
         OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), ChosenClosestEnemyLocation);
