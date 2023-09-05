@@ -133,14 +133,13 @@ void APlayerCharacter::Dash()
 
 	UGameplayStatics::SpawnSoundAttached(JetpackSound, GetMesh(), TEXT("JetpackEmitter_L"));
 	UGameplayStatics::SpawnSoundAttached(JetpackSound, GetMesh(), TEXT("JetpackEmitter_R"));
-
-	// ShotDirection = -OwnerRotation.Vector();
 	
+	// Setting the dash action direction and allowing sliding along surfaces.
 	const FVector ForwardDirection = this->GetActorRotation().Vector();
 	LaunchCharacter(ForwardDirection * DashDistance, true, true);
 	FHitResult FloorHit = GetCharacterMovement()->CurrentFloor.HitResult;
 	FVector NormalFloor = GetCharacterMovement()->CurrentFloor.HitResult.Normal;
-	//Need to see why character moves really far suddenly sometimes and slides normally other times
+	//Need to see why character moves really far suddenly sometimes and slides normally other times.
 	GetMovementComponent()->SlideAlongSurface(ForwardDirection * DashDistance, 1-FloorHit.Time, NormalFloor, FloorHit, true);
 	if (DashMontage)
 	{

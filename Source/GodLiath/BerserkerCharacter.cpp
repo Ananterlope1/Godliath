@@ -81,20 +81,17 @@ void ABerserkerCharacter::Eat()
 {
     // Get object to eat
     // Despawn object
-    // Increase berserker character scale by value
-	// Check boolean selector for dead enemy in range. 
+    // Increase berserker character scale by value 
 	// BTService for enemy dead/eatable location
 	// BTTask for eat with animation and gibs
 	if (EatSound)
 	{
 	UGameplayStatics::SpawnSoundAttached(EatSound, GetMesh(), TEXT("Status"));
-	}
-	
+	}	
 
 	Eating = true;
 	FVector CurrentScale = this->GetActorScale3D();
 	CurrentScale *= ScalingEating;
-	// CurrentScale += EatingScale;
 	this->SetActorScale3D(CurrentScale);
 	if (CurrentScale.X >= CargoOpenScale.X)
 	{

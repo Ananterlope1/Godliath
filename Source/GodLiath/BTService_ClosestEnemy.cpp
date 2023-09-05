@@ -40,7 +40,7 @@ void UBTService_ClosestEnemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
         //Check that enemy isn't dead/ eatable and not the current AI
         if (EnemyAI->IsDead() == false && EnemyAI != SelfAI)
         {
-            UE_LOG(LogTemp, Display, TEXT("Check EnemyAliveAI loop"));
+            // UE_LOG(LogTemp, Display, TEXT("Check EnemyAliveAI loop"));
 
             ThisEnemyLocation = EnemyAI->GetPawn()->GetActorLocation();
             EnemyDetected = true;
@@ -52,9 +52,9 @@ void UBTService_ClosestEnemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
                 CheckForVectorChange = true;
                 EnemyPawn = Cast<AEnemyCharacter>(EnemyAI->GetPawn());
                 FString EnemyName = EnemyPawn->GetName();
-                UE_LOG(LogTemp, Error, TEXT("Line Of Sight to Enemy: %s"), *EnemyName);
+                // UE_LOG(LogTemp, Error, TEXT("Line Of Sight to Enemy: %s"), *EnemyName);
                 FString EnemyLoc = ChosenClosestEnemyLocation.ToCompactString();
-                UE_LOG(LogTemp, Error, TEXT("Enemy Location: %s"), *EnemyLoc);
+                // UE_LOG(LogTemp, Error, TEXT("Enemy Location: %s"), *EnemyLoc);
             }
             PreviousClosestEnemyLocation = ChosenClosestEnemyLocation;
             // UE_LOG(LogTemp, Warning, TEXT("Chosen Enemy location changed in loop?: %s"), CheckForVectorChange? TEXT("true") : TEXT("false"));
@@ -72,13 +72,13 @@ void UBTService_ClosestEnemy::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
     if (CheckForVectorChange && OwnerComp.GetAIOwner()->LineOfSightTo(EnemyPawn))
     {
         FString EnemyName = EnemyPawn->GetName();
-        UE_LOG(LogTemp, Display, TEXT("Setting Line of sight to Enemy %s"), *EnemyName);
+        // UE_LOG(LogTemp, Display, TEXT("Setting Line of sight to Enemy %s"), *EnemyName);
         OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), ChosenClosestEnemyLocation);
         OwnerComp.GetBlackboardComponent()->SetValueAsObject(EnemyActorKey.SelectedKeyName, EnemyPawn);
     }
     else
     {
-        UE_LOG(LogTemp, Error, TEXT("Clearing values of Enemy"));
+        // UE_LOG(LogTemp, Error, TEXT("Clearing values of Enemy"));
         OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
         OwnerComp.GetBlackboardComponent()->ClearValue(EnemyActorKey.SelectedKeyName);
 

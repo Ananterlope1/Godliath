@@ -21,7 +21,6 @@ void UBTService_IsDead::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
         return;    
     }
 
-    
     bool IsCharacterDead = CharacterAI->IsDead();
 
     if (IsCharacterDead)
@@ -30,6 +29,5 @@ void UBTService_IsDead::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
     }else
     {
         OwnerComp.GetBlackboardComponent()->SetValueAsBool(GetSelectedBlackboardKey(), false);
-
     }
 }

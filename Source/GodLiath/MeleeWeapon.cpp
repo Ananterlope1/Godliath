@@ -94,9 +94,9 @@ void AMeleeWeapon::SwingWeapon()
 
 	if (bSuccess)
 	{
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, HitResult.Location, SwingDirection.Rotation());
-		
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, HitResult.Location, SwingDirection.Rotation());		
 		AActor* HitActor = HitResult.GetActor();
+		
 		if (HitActor != nullptr)
 		{
 			UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ImpactSoundEnemy, HitResult.Location, SwingDirection.Rotation());
