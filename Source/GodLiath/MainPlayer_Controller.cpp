@@ -5,6 +5,7 @@
 #include "TimerManager.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/PlayerController.h"
 
 
 void AMainPlayer_Controller::BeginPlay()
@@ -25,10 +26,13 @@ void AMainPlayer_Controller::GameHasEnded(class AActor* EndGameFocus, bool bIsWi
         if (WinScreen != nullptr)
         {
             WinScreen->AddToViewport();
-            FTimerHandle Handle;
-	        FTimerDelegate Delegate;
-	        Delegate.BindUFunction( this, FName("ReturnToMain"));
-            GetWorldTimerManager().SetTimer(Handle, Delegate, RestartDelay, false);
+            this->SetShowMouseCursor(true);
+            this->SetInputMode(FInputModeUIOnly());
+            this->Pause();
+            // FTimerHandle Handle;
+	        // FTimerDelegate Delegate;
+	        // Delegate.BindUFunction( this, FName("ReturnToMain"));
+            // GetWorldTimerManager().SetTimer(Handle, Delegate, RestartDelay, false);
         }
     }else
     {

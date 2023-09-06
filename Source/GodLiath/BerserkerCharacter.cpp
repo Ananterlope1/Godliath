@@ -84,39 +84,16 @@ void ABerserkerCharacter::Eat()
     // Increase berserker character scale by value 
 	// BTService for enemy dead/eatable location
 	// BTTask for eat with animation and gibs
-	if (EatSound)
-	{
-	UGameplayStatics::SpawnSoundAttached(EatSound, GetMesh(), TEXT("Status"));
-	}	
+	float AnimLength = this->PlayAnimMontage(EatingMontage);
+	float CurrentSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	UE_LOG(LogTemp, Display, TEXT("BerserkerMovement: %f"), CurrentSpeed);
+	GetCharacterMovement()->MaxWalkSpeed = 0;
 
-	Eating = true;
-	FVector CurrentScale = this->GetActorScale3D();
-	CurrentScale *= ScalingEating;
-	this->SetActorScale3D(CurrentScale);
-	if (CurrentScale.X >= CargoOpenScale.X)
-	{
-		this->Tags.AddUnique(FName(TEXT("CargoBayOpen")));
-	}
-	if (CurrentScale.X >= BossCaptureScale.X)
-	{
-		this->Tags.AddUnique(FName(TEXT("BossOpen")));
-	}
-
-	Eating = false;
-	float CurrentMaxRange = this->MeleeWeapon->GetMaxRange();
-	CurrentMaxRange *= ScalingEating;
-	this->MeleeWeapon->SetMaxRange(CurrentMaxRange);
-
-	float CurrentDamage = this->MeleeWeapon->GetDamage();
-	CurrentDamage *= ScalingEating;
-	this->MeleeWeapon->SetDamage(CurrentDamage);
-
-	float CurrentWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
-	CurrentWalkSpeed *= ScalingEating;
-	GetCharacterMovement()->MaxWalkSpeed = CurrentWalkSpeed;
-
-	MaxHealth *= ScalingEating;
-
+	FTimerHandle EatingHandle;
+	FTimerDelegate EatingDelegate;
+	EatingDelegate.BindUFunction( this, FName("ScaleFromEating"), CurrentSpeed);
+	GetWorldTimerManager().SetTimer(EatingHandle, EatingDelegate, AnimLength, false);	
+	
 }
 
 bool ABerserkerCharacter::IsEating() const
@@ -142,6 +119,43 @@ void ABerserkerCharacter::PlayResurrection()
 	IsDead();	
 }
 
+void ABerserkerCharacter::ScaleFromEating(float CurrentSpeed)
+{
+	if (EatSound)
+	{
+	UGameplayStatics::SpawnSoundAttached(EatSound, GetMesh(), TEXT("Status"));
+	}	
+
+	Eating = true;
+	FVector CurrentScale = this->GetActorScale3D();
+	CurrentScale *= ScalingEating;
+	this->SetActorScale3D(CurrentScale);
+	if (CurrentScale.X >= CargoOpenScale.X)
+	{
+		this->Tags.AddUnique(FName(TEXT("CargoBayOpen")));
+	}
+	if (CurrentScale.X >= BossCaptureScale.X)
+	{
+		this->Tags.AddUnique(FName(TEXT("BossOpen")));
+	}	
+	
+	float CurrentMaxRange = this->MeleeWeapon->GetMaxRange();
+	CurrentMaxRange *= ScalingEating;
+	this->MeleeWeapon->SetMaxRange(CurrentMaxRange);
+
+	float CurrentDamage = this->MeleeWeapon->GetDamage();
+	CurrentDamage *= ScalingEating;
+	this->MeleeWeapon->SetDamage(CurrentDamage);
+
+	// float CurrentWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	CurrentSpeed *= ScalingEating;
+	GetCharacterMovement()->MaxWalkSpeed = CurrentSpeed;
+
+	MaxHealth *= ScalingEating;
+
+	Eating = false;
+}
+
 void ABerserkerCharacter::SwingWeapon()
 {
 	Super::SwingWeapon();
@@ -150,5 +164,15 @@ void ABerserkerCharacter::SwingWeapon()
 		UGameplayStatics::SpawnSoundAttached(AttackSound, GetMesh(), TEXT("Status"));
 	}
 
+}
+
+float ABerserkerCharacter::GetMaxDamage() const
+{
+	return this->MeleeWeapon->GetDamage();
+}
+
+float ABerserkerCharacter::GetMaxHealth() const
+{
+	return MaxHealth;
 }
 

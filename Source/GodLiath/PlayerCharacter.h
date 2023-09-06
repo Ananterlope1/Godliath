@@ -71,7 +71,7 @@ private:
 	float MaxHealth = 100;
 
 	UPROPERTY(VisibleAnywhere)
-	float Health;
+	float Health = 1;
 
 	UPROPERTY(EditAnywhere)
 	float DashDistance = 6000;

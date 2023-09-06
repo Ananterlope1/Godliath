@@ -54,7 +54,16 @@ public:
 	UFUNCTION()
 	void PlayResurrection();
 
+	UFUNCTION()
+	void ScaleFromEating(float CurrentSpeed);
+
 	virtual void SwingWeapon() override;
+
+	UFUNCTION(BlueprintPure)
+	float GetMaxDamage() const;
+
+	UFUNCTION(BlueprintPure)
+	float GetMaxHealth() const;
 
 private:
 
@@ -80,5 +89,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	USoundBase* EatSound;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* EatingMontage;
 	
 };
