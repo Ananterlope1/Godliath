@@ -10,6 +10,20 @@
 /**
  * 
  */
+
+USTRUCT()
+struct FActor_Dist         
+{
+ 
+    GENERATED_USTRUCT_BODY()
+ 
+public:
+
+    float distance = 0;  
+    AActor* actor = NULL;   
+    
+};
+
 UCLASS()
 class GODLIATH_API UBTService_ClosestEnemy : public UBTService_BlackboardBase
 {
@@ -20,6 +34,8 @@ public:
 
 protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
+
+	static void Distance_Sort(UPARAM() TArray <AActor*> Array_To_Sort, UPARAM()AActor* From_Actor, bool Descending, TArray <FActor_Dist> &Sorted_Array);
 	// FVector ChosenClosestEatableLocation;
 
 	UPROPERTY(EditAnywhere, Category=Blackboard)
@@ -38,3 +54,5 @@ private:
 	// bool CheckForVectorChange;
 	
 };
+
+

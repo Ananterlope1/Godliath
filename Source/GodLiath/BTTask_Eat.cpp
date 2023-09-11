@@ -34,6 +34,7 @@ EBTNodeResult::Type UBTTask_Eat::ExecuteTask(UBehaviorTreeComponent &OwnerComp, 
     // Get the eaten actor and set it pending for destroy
     FName EatableName = TEXT("ClosestEatableActor");
     AEnemyCharacter* ClosestEatableActor = Cast<AEnemyCharacter>(BlackboardComp->GetValueAsObject(EatableName)); 
+  
     ClosestEatableActor->DetachFromControllerPendingDestroy();
 
     // Spawn the actors eaten emitter and get location to spawn
@@ -44,9 +45,8 @@ EBTNodeResult::Type UBTTask_Eat::ExecuteTask(UBehaviorTreeComponent &OwnerComp, 
         UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), EatenEmitter, EatableEmitterLocation);
     }       
 
-    // Hide the eaten actor and then destroy it
-    ClosestEatableActor->SetActorHiddenInGame(true);
-    ClosestEatableActor->Destroy();
+    // Hide the eaten actor and then destroy it    
+    ClosestEatableActor->HandleDestruction();
 
     // Return that the task suceeded.
     return EBTNodeResult::Succeeded;

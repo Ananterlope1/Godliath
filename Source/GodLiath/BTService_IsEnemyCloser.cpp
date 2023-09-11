@@ -26,7 +26,6 @@ void UBTService_IsEnemyCloser::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
     }
     OwnerLocation = OwnerComp.GetOwner()->GetActorLocation();
 
-    // OwnerComp.GetAIOwner()->GetBlackboardComponent()->GetValue(FName("LastKnownPlayerLocation"));
     if (OwnerComp.GetBlackboardComponent())
     {
         UBlackboardComponent* BlackboardComp = OwnerComp.GetBlackboardComponent();
@@ -35,13 +34,14 @@ void UBTService_IsEnemyCloser::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
         // uint8* ClosestLocKey = BlackboardComp->GetK(KeyID);
         FName PlayerKeyID = FName(TEXT("LastKnownPlayerLocation"));
         FVector ClosestPlayerLoc = BlackboardComp->GetValueAsVector(PlayerLocKey.SelectedKeyName);  
-                
-        // UE_LOG(LogTemp, Display, TEXT("ClosestEnemyLocKey: %s"), *ClosestEnemyLoc.ToString());
-        // UE_LOG(LogTemp, Display, TEXT("ClosestPlayerLocKey: %s"), *ClosestPlayerLoc.ToString());
-        // UE_LOG(LogTemp, Display, TEXT("ClosestEnemyLocKey: %d"), FVector::Dist(OwnerLocation, ClosestEnemyLoc));
-        // UE_LOG(LogTemp, Display, TEXT("ClosestPlayerLocKey: %d"), FVector::Dist(OwnerLocation, ClosestPlayerLoc));
 
-        if (FVector::Dist(OwnerLocation, ClosestEnemyLoc) < FVector::Dist(OwnerLocation, ClosestPlayerLoc))
+        double DisToEnemy = FVector::Dist(OwnerLocation, ClosestEnemyLoc);
+        double DisToPlayer = FVector::Dist(OwnerLocation, ClosestPlayerLoc);
+
+        // UE_LOG(LogTemp, Error, TEXT("Enemy Distance:  %d"), DisToEnemy);
+        // UE_LOG(LogTemp, Error, TEXT("Player Distance: %d"), DisToPlayer);
+
+        if (DisToEnemy < DisToPlayer)
         {            
             OwnerComp.GetBlackboardComponent()->SetValueAsBool(GetSelectedBlackboardKey(), true);
         }else

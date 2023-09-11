@@ -67,6 +67,8 @@ public:
 
 private:
 
+	float MaxSpeed = 1200;
+
 	UPROPERTY(EditAnywhere)
 	float ResurrectDelay = 3;
 
@@ -76,16 +78,16 @@ private:
 	UPROPERTY(EditAnywhere)
 	float ScalingEating = 1.1;
 
-	UPROPERTY(EditAnywhere)
-	FVector BossCaptureScale = FVector(2.5, 2.5, 2.5);
+	// UPROPERTY(EditAnywhere)
+	// FVector BossCaptureScale = FVector(4.1, 4.1, 4.1);
 
-	UPROPERTY(EditAnywhere)
-	FVector CargoOpenScale = FVector(1.8, 1.8, 1.8);
+	// UPROPERTY(EditAnywhere)
+	// FVector CargoOpenScale = FVector(1.8, 1.8, 1.8);
 
 	FTimerHandle ResurrectTimer;	
 
-	UPROPERTY(EditAnywhere)
-	USoundBase* AttackSound;
+	// UPROPERTY(EditAnywhere)
+	// USoundBase* AttackSound;
 
 	UPROPERTY(EditAnywhere)
 	USoundBase* EatSound;

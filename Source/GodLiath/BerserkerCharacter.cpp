@@ -15,6 +15,17 @@
 void ABerserkerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+	UCharacterMovementComponent* const MovementComponent = GetCharacterMovement();
+	if (MovementComponent)
+	{
+		MovementComponent->bOrientRotationToMovement = true;
+		MovementComponent->bUseControllerDesiredRotation = false;
+	}
+	
+	GetCharacterMovement()->RotationRate = SmoothRotationRate;
 	
 }
 
@@ -86,8 +97,11 @@ void ABerserkerCharacter::Eat()
 	// BTTask for eat with animation and gibs
 	float AnimLength = this->PlayAnimMontage(EatingMontage);
 	float CurrentSpeed = GetCharacterMovement()->MaxWalkSpeed;
-	UE_LOG(LogTemp, Display, TEXT("BerserkerMovement: %f"), CurrentSpeed);
 	GetCharacterMovement()->MaxWalkSpeed = 0;
+	if (EatSound)
+	{
+	UGameplayStatics::SpawnSoundAttached(EatSound, GetMesh(), TEXT("Status"));
+	}	
 
 	FTimerHandle EatingHandle;
 	FTimerDelegate EatingDelegate;
@@ -121,23 +135,11 @@ void ABerserkerCharacter::PlayResurrection()
 
 void ABerserkerCharacter::ScaleFromEating(float CurrentSpeed)
 {
-	if (EatSound)
-	{
-	UGameplayStatics::SpawnSoundAttached(EatSound, GetMesh(), TEXT("Status"));
-	}	
 
 	Eating = true;
 	FVector CurrentScale = this->GetActorScale3D();
 	CurrentScale *= ScalingEating;
 	this->SetActorScale3D(CurrentScale);
-	if (CurrentScale.X >= CargoOpenScale.X)
-	{
-		this->Tags.AddUnique(FName(TEXT("CargoBayOpen")));
-	}
-	if (CurrentScale.X >= BossCaptureScale.X)
-	{
-		this->Tags.AddUnique(FName(TEXT("BossOpen")));
-	}	
 	
 	float CurrentMaxRange = this->MeleeWeapon->GetMaxRange();
 	CurrentMaxRange *= ScalingEating;
@@ -147,9 +149,20 @@ void ABerserkerCharacter::ScaleFromEating(float CurrentSpeed)
 	CurrentDamage *= ScalingEating;
 	this->MeleeWeapon->SetDamage(CurrentDamage);
 
-	// float CurrentWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
-	CurrentSpeed *= ScalingEating;
-	GetCharacterMovement()->MaxWalkSpeed = CurrentSpeed;
+	// Bug if Berserker eats 2 things close to each other and current speed is still set to 0.
+	// This checks for that and should fix.
+	if (CurrentSpeed != 0)
+	{
+		CurrentSpeed *= ScalingEating;
+		GetCharacterMovement()->MaxWalkSpeed = CurrentSpeed;
+		MaxSpeed = CurrentSpeed;
+	}
+	else
+	{
+		MaxSpeed *= ScalingEating;
+		GetCharacterMovement()->MaxWalkSpeed = MaxSpeed;
+	}
+	
 
 	MaxHealth *= ScalingEating;
 
@@ -159,11 +172,17 @@ void ABerserkerCharacter::ScaleFromEating(float CurrentSpeed)
 void ABerserkerCharacter::SwingWeapon()
 {
 	Super::SwingWeapon();
+	float AnimLength = this->PlayAnimMontage(AttackMontage);
+	if (AttackMontage)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Doing attack anim"));
+		
+	}
+	MeleeWeapon->SwingWeapon();
 	if (AttackSound)
 	{
 		UGameplayStatics::SpawnSoundAttached(AttackSound, GetMesh(), TEXT("Status"));
 	}
-
 }
 
 float ABerserkerCharacter::GetMaxDamage() const

@@ -4,6 +4,7 @@
 #include "MinionCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "GodLiathGameModeBase.h"
+#include "MeleeWeapon.h"
 
 
 void AMinionCharacter::BeginPlay()
@@ -24,7 +25,7 @@ float AMinionCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const
 		// Need to set this after being eaten or it stops checks on this minion.
         // DetachFromControllerPendingDestroy();		
 		
-		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		
 		AGodLiathGameModeBase* GameMode = GetWorld()->GetAuthGameMode<AGodLiathGameModeBase>();
 		if (GameMode != nullptr)
@@ -40,8 +41,10 @@ float AMinionCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const
 bool AMinionCharacter::IsDead() 
 {	
 	if(this->IsPendingKillPending())
-	{
+	{		
 		return true;
 	}
 	return Health <= 0;
 }
+
+

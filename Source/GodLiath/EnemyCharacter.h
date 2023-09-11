@@ -25,6 +25,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void HandleDestruction();
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -53,10 +55,18 @@ public:
 	UParticleSystem* GetEatenEmitter();
 
 	void SetRotationRate();
-
 	
 	UPROPERTY()
 	AMeleeWeapon* MeleeWeapon;
+
+	UPROPERTY(EditAnywhere)
+	FRotator SmoothRotationRate = FRotator(0.0f,180.0f,0.0f);
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* AttackSound;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* AttackMontage;	
 
 private:
 
@@ -72,9 +82,9 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AMeleeWeapon> MeleeClass;
 
-
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* EatenEmitter;
+
 	
 
 };

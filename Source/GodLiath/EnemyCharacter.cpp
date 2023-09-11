@@ -7,12 +7,26 @@
 #include "Components/CapsuleComponent.h"
 #include "GodLiathGameModeBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+	UCharacterMovementComponent* const MovementComponent = GetCharacterMovement();
+	if (MovementComponent)
+	{
+		MovementComponent->bOrientRotationToMovement = true;
+		MovementComponent->bUseControllerDesiredRotation = false;
+	}
+	
+	GetCharacterMovement()->RotationRate = SmoothRotationRate;
+	
 
 }
 
@@ -31,7 +45,12 @@ void AEnemyCharacter::BeginPlay()
 		MeleeWeapon->SetOwner(this);
 	}
 	
-	GetCharacterMovement()->RotationRate = FRotator(RotationRate, RotationRate, RotationRate);
+	// this->bUseControllerRotationYaw = false
+	
+	// GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	// GetCharacterMovement()->RotationRate = SmoothRotationRate;
+	//FRotator(RotationRate, RotationRate, RotationRate);
 	
 }
 
@@ -40,6 +59,13 @@ void AEnemyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AEnemyCharacter::HandleDestruction()
+{
+	SetActorHiddenInGame(true);
+	MeleeWeapon->Destroy();
+	Destroy();
 }
 
 // Called to bind functionality to input
@@ -74,7 +100,17 @@ float AEnemyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const&
 
 void AEnemyCharacter::SwingWeapon()
 {
+	this->PlayAnimMontage(AttackMontage);
+	if (AttackMontage)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Doing attack anim"));
+		
+	}
 	MeleeWeapon->SwingWeapon();
+	if (AttackSound)
+	{
+		UGameplayStatics::SpawnSoundAttached(AttackSound, GetMesh(), TEXT("Status"));
+	}
 
 }
 
@@ -123,6 +159,6 @@ UParticleSystem* AEnemyCharacter::GetEatenEmitter()
 
 void AEnemyCharacter::SetRotationRate()
 {
-	GetCharacterMovement()->RotationRate = FRotator(RotationRate, RotationRate, RotationRate);
+	// GetCharacterMovement()->RotationRate = FRotator(RotationRate, RotationRate, RotationRate);
 	
 }
